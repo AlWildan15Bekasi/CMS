@@ -1,10 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Management Panel System - Al-Wildan 15 (V3.4 Dynamic)</title>
+    
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="favicon.png">
     
@@ -30,7 +30,6 @@
                         neongreen: '#00fa9a', 
                         neonpink: '#ff007f',  
                         neonyellow: '#f6d365',
-                        // Light Mode Colors
                         lightbg: '#f8fafc',
                         lightpanel: '#ffffff',
                         lightborder: '#e2e8f0',
@@ -47,7 +46,6 @@
     </script>
     
     <style>
-        /* Base styles transition */
         body { 
             font-family: 'Space Grotesk', sans-serif; 
             background-attachment: fixed;
@@ -157,7 +155,6 @@
         .tab-content.active { display: block; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* TAB BOUNCY ANIMATION */
         .tab-btn { transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s, color 0.3s; }
         .tab-btn:active { transform: scale(0.95); }
 
@@ -202,14 +199,14 @@
         /* Print Styles - IMPORTANT FIX FOR LEAKING */
         #print-section { display: none; }
         
-        .a4-page { width: 297mm; min-height: 210mm; background: white !important; color: black !important; box-shadow: 0 0 20px rgba(0,0,0,0.5); margin: 0 auto 20mm auto; padding: 15mm; box-sizing: border-box; font-family: Arial, sans-serif; page-break-after: always; }
-        .a4-page-potrait { width: 210mm; min-height: 297mm; background: white !important; color: black !important; box-shadow: 0 0 20px rgba(0,0,0,0.5); margin: 0 auto 20mm auto; padding: 15mm; box-sizing: border-box; font-family: Arial, sans-serif; page-break-after: always; }
+        .a4-page-potrait { width: 210mm; min-height: 297mm; background: white !important; color: black !important; box-shadow: 0 0 20px rgba(0,0,0,0.5); margin: 0 auto 20mm auto; padding: 15mm; box-sizing: border-box; font-family: Arial, sans-serif; page-break-after: always; position: relative;}
+        .a4-page { width: 297mm; min-height: 210mm; background: white !important; color: black !important; box-shadow: 0 0 20px rgba(0,0,0,0.5); margin: 0 auto 20mm auto; padding: 15mm; box-sizing: border-box; font-family: Arial, sans-serif; page-break-after: always; position: relative;}
         
         @media print { 
             body { background: white !important; display: block !important; height: auto !important; overflow: visible !important; } 
             #login-page, #main-app, .modal-overlay, #toast-container { display: none !important; } 
             #print-section { display: block !important; position: static !important; width: 100% !important; margin: 0 !important; padding: 0 !important; } 
-            .a4-page, .a4-page-potrait { margin: 0 auto !important; box-shadow: none !important; border: none !important; page-break-after: always; } 
+            .a4-page, .a4-page-potrait { margin: 0 auto !important; box-shadow: none !important; border: none !important; } 
             .no-print { display: none !important; } 
             * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; } 
         }
@@ -414,7 +411,7 @@
                                 <div><h2 class="text-lg font-bold text-lighttext dark:text-white tracking-widest uppercase">Biometric Data</h2><p class="text-[10px] text-muted tracking-wider font-bold">Gate Access Log Sync</p></div>
                             </div>
                             <div class="flex flex-wrap items-center gap-2">
-                                <button onclick="openModal('edit-attendance-modal')" class="w-9 h-9 rounded-full bg-neonyellow/20 text-neonyellow dark:text-neonyellow text-orange-500 border border-neonyellow/50 flex items-center justify-center hover:bg-neonyellow hover:text-white transition" title="Edit Manual Rekap Kehadiran"><i class="fas fa-pen text-xs"></i></button>
+                                <button onclick="openModal('edit-attendance-modal')" class="w-9 h-9 rounded-full bg-neonyellow/20 text-neonyellow dark:text-neonyellow text-orange-500 border border-neonyellow/50 flex items-center justify-center hover:bg-neonyellow hover:text-white transition" title="Validasi & Edit Rekap (Cetak Slip)"><i class="fas fa-pen text-xs"></i></button>
                                 
                                 <input type="date" id="att-date-start" class="input-cyber h-9 text-xs w-32"><span class="text-neoncyan/50 text-xs"><i class="fas fa-minus"></i></span><input type="date" id="att-date-end" class="input-cyber h-9 text-xs w-32">
                                 <div class="flex custom-bg-alt p-1 rounded-full border custom-border ml-1">
@@ -422,14 +419,15 @@
                                     <button onclick="clearAttFilter()" class="w-8 h-8 rounded-full text-muted flex items-center justify-center hover:text-neonpink transition"><i class="fas fa-times text-xs"></i></button>
                                     <button onclick="loadAttendance()" class="w-8 h-8 rounded-full text-muted flex items-center justify-center hover:text-neongreen transition"><i class="fas fa-sync-alt text-xs"></i></button>
                                 </div>
-                                <button onclick="printPDF('slipGaji')" class="btn-outline-cyber px-4 h-9 ml-2 text-xs font-bold flex items-center gap-2 tracking-widest uppercase"><i class="fas fa-print"></i> Export</button>
+                                <button onclick="printPDF('slipGaji')" class="btn-outline-cyber px-4 h-9 ml-2 text-xs font-bold flex items-center gap-2 tracking-widest uppercase"><i class="fas fa-print"></i> Cetak Slip</button>
                             </div>
                         </div>
                         <div class="flex-1 overflow-hidden m-2 rounded-xl border custom-border bg-white dark:bg-[#080d1e] flex flex-col transition-colors">
                             <div class="overflow-y-auto flex-1 custom-scrollbar">
                                 <table class="w-full text-left text-sm border-collapse">
                                     <thead class="bg-gray-100 dark:bg-[#0b1426] text-neoncyan dark:text-neoncyan text-blue-700 text-xs tracking-widest uppercase sticky top-0 z-10 shadow-sm transition-colors">
-                                        <tr><th class="p-4 border-b custom-border">Date</th><th class="p-4 border-b custom-border">Personnel</th><th class="p-4 border-b custom-border text-center">Target</th><th class="p-4 border-b custom-border text-center">Actual</th><th class="p-4 border-b custom-border text-center">Variance</th><th class="p-4 border-b custom-border text-center">Status</th></tr>
+                                        <!-- HANYA MENAMPILKAN SCAN IN SESUAI REQUEST -->
+                                        <tr><th class="p-4 border-b custom-border">Date</th><th class="p-4 border-b custom-border">Personnel</th><th class="p-4 border-b custom-border text-center">Target</th><th class="p-4 border-b custom-border text-center">Scan In</th><th class="p-4 border-b custom-border text-center">Variance / Denda</th><th class="p-4 border-b custom-border text-center">Status</th></tr>
                                     </thead>
                                     <tbody id="table-attendance-body" class="divide-y custom-border"></tbody>
                                 </table>
@@ -466,7 +464,7 @@
                             <div class="flex items-center gap-2">
                                 <input type="date" id="cico-date-start" class="input-cyber h-9 text-xs w-32"><span class="text-neoncyan/50 text-xs"><i class="fas fa-minus"></i></span><input type="date" id="cico-date-end" class="input-cyber h-9 text-xs w-32">
                                 <div class="flex custom-bg-alt p-1 rounded-full border custom-border ml-1">
-                                    <button onclick="loadCICO()" class="w-8 h-8 rounded-full bg-neonblue dark:bg-neonblue bg-blue-500 text-white flex items-center justify-center hover:bg-neoncyan transition"><i class="fas fa-search text-xs"></i></button>
+                                    <button onclick="loadCICO()" class="w-8 h-8 rounded-full bg-neonblue dark:bg-neonblue bg-blue-50 text-white flex items-center justify-center hover:bg-neoncyan transition"><i class="fas fa-search text-xs"></i></button>
                                     <button onclick="clearCicoFilter()" class="w-8 h-8 rounded-full text-muted flex items-center justify-center hover:text-neonpink transition"><i class="fas fa-times text-xs"></i></button>
                                     <button onclick="loadCICO()" class="w-8 h-8 rounded-full text-muted flex items-center justify-center hover:text-neongreen transition"><i class="fas fa-sync-alt text-xs"></i></button>
                                 </div>
@@ -536,14 +534,13 @@
                             <div><label class="block text-[10px] text-muted uppercase tracking-widest mb-2 pl-1 font-bold">Date</label><input type="date" id="infal-tgl" class="input-cyber w-full"></div>
                             <div><label class="block text-[10px] text-muted uppercase tracking-widest mb-2 pl-1 font-bold">Session</label><select id="infal-jp" class="input-cyber w-full"><option value="JP 1">JP 1</option><option value="JP 2">JP 2</option><option value="JP 3">JP 3</option><option value="JP 4">JP 4</option><option value="JP 5">JP 5</option><option value="JP 6">JP 6</option></select></div>
                             <div><label class="block text-[10px] text-muted uppercase tracking-widest mb-2 pl-1 font-bold">Sector (Class)</label><select id="infal-kelas" class="input-cyber w-full custom-scrollbar"><option value="">-- API Sync --</option></select></div>
-                            <div><label class="block text-[10px] text-muted uppercase tracking-widest mb-2 pl-1 font-bold">Status Code</label><select id="infal-alasan" class="input-cyber w-full"><option value="Sakit">Sakit</option><option value="Izin">Izin</option><option value="Dinas Luar">Dinas Luar</option></select></div>
+                            <div><label class="block text-[10px] text-muted uppercase tracking-widest mb-2 pl-1 font-bold">Status Code</label><select id="infal-alasan" class="input-cyber w-full"><option value="Sakit">Sakit</option><option value="Izin">Izin</option><option value="Dinas Luar">Dinas Luar</option><option value="Lainnya">Lainnya</option></select></div>
                             <div><label class="block text-[10px] text-neonpink dark:text-neonpink text-red-500 uppercase tracking-widest mb-2 pl-1 font-bold">Outbound (Izin)</label><select id="infal-keluar" class="input-cyber w-full border-neonpink/50 dark:text-gray-300 global-teacher-dropdown"><option value="">-- Select --</option></select></div>
                             <div><label class="block text-[10px] text-neongreen dark:text-neongreen text-green-600 uppercase tracking-widest mb-2 pl-1 font-bold">Inbound (Masuk)</label><select id="infal-masuk" class="input-cyber w-full border-neongreen/50 dark:text-white dark:bg-neongreen/5 bg-green-50 global-teacher-dropdown font-bold"><option value="">-- Select --</option></select></div>
                         </div>
                         <div class="mt-8 flex justify-end border-t custom-border pt-5 relative z-10"><button onclick="saveInfal()" id="btn-save-infal" class="btn-cyber px-8 py-3 text-xs tracking-[0.2em] uppercase font-bold flex items-center gap-3"><i class="fas fa-upload"></i> TRANSMIT DATA</button></div>
                     </div>
                     
-                    <!-- NEW: INFAL HISTORY TABLES -->
                     <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
                         <!-- Daily Log -->
                         <div class="cyber-panel p-6 col-span-1 xl:col-span-2">
@@ -622,7 +619,6 @@
                                  </table>
                              </div>
                              
-                             <!-- NEW: Notes Textarea -->
                              <div class="mt-6 border custom-border p-4 rounded-xl custom-bg-alt">
                                  <label class="block text-[10px] text-neoncyan dark:text-neoncyan text-blue-600 uppercase tracking-widest mb-2 font-bold"><i class="fas fa-pen-alt mr-1"></i> Catatan & Feedback Supervisi</label>
                                  <textarea id="obs-notes" class="w-full bg-transparent border-b custom-border text-sm text-lighttext dark:text-white outline-none resize-y min-h-[60px] p-2" placeholder="Tuliskan catatan khusus atau rekomendasi perbaikan untuk guru di sini..."></textarea>
@@ -640,6 +636,7 @@
                                 <div class="w-full border-t custom-border pt-4 mt-2">
                                     <div class="flex justify-between items-center mb-3">
                                         <h4 class="font-bold text-muted text-[10px] uppercase tracking-widest"><i class="fas fa-history mr-1"></i> Recent Observations</h4>
+                                        <button onclick="loadSupervisionHistory()" class="text-xs text-neoncyan hover:text-neonblue"><i class="fas fa-sync-alt"></i></button>
                                     </div>
                                     <div class="bg-gray-50 dark:bg-darkbg border custom-border rounded-xl p-3">
                                         <div class="overflow-x-auto">
@@ -666,10 +663,9 @@
                          </div>
                          
                          <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="additional-score-cards">
-                             <!-- Cards will be generated dynamically -->
                              <div class="cyber-panel p-5 text-center text-muted italic flex flex-col items-center justify-center h-40 col-span-full">
-                                 <i class="fas fa-circle-notch fa-spin text-2xl mb-2 opacity-50"></i>
-                                 <p class="text-xs">Syncing Active Modules...</p>
+                                 <i class="fas fa-box-open text-3xl mb-2 opacity-50"></i>
+                                 <p class="text-xs">Belum ada modul penilaian tambahan yang aktif.</p>
                              </div>
                          </div>
                     </div>
@@ -887,10 +883,17 @@
             <div class="overflow-x-auto custom-scrollbar max-h-[50vh]">
                 <table class="w-full text-left text-xs md:text-sm text-lighttext dark:text-gray-300">
                     <thead class="bg-gray-200 dark:bg-gray-800 font-bold tracking-widest uppercase text-[10px] text-muted sticky top-0">
-                        <tr><th class="p-3 border-b custom-border">Nama Guru</th><th class="p-3 border-b custom-border w-20 text-center">Hadir</th><th class="p-3 border-b custom-border w-20 text-center">Sakit</th><th class="p-3 border-b custom-border w-20 text-center">Izin</th><th class="p-3 border-b custom-border w-20 text-center">Alpa</th></tr>
+                        <tr>
+                            <th class="p-3 border-b custom-border">Nama Guru</th>
+                            <th class="p-3 border-b custom-border w-16 text-center">Hadir</th>
+                            <th class="p-3 border-b custom-border w-16 text-center">Sakit</th>
+                            <th class="p-3 border-b custom-border w-16 text-center">Izin</th>
+                            <th class="p-3 border-b custom-border w-16 text-center">Alpa</th>
+                            <th class="p-3 border-b custom-border w-32 text-center text-neonpink">Denda (Rp)</th>
+                        </tr>
                     </thead>
                     <tbody class="divide-y custom-border" id="edit-att-tbody">
-                        <tr><td colspan="5" class="text-center py-4 text-muted italic">Waiting API Sync...</td></tr>
+                        <tr><td colspan="6" class="text-center py-4 text-muted italic">Waiting API Sync...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -906,6 +909,8 @@
             <button onclick="closeModal('input-score-modal')" class="absolute top-4 right-4 text-muted hover:text-neonpink transition text-xl"><i class="fas fa-times"></i></button>
             <h2 class="text-lg font-bold text-lighttext dark:text-white uppercase tracking-widest mb-1 border-b custom-border pb-2" id="input-score-title">Penilaian...</h2>
             <p class="text-[10px] text-neoncyan mb-4 font-bold" id="input-score-target">Target: -</p>
+            <input type="hidden" id="input-score-type">
+            <input type="hidden" id="input-score-subcontext">
             
             <div class="space-y-4" id="input-score-body">
                 <!-- Inputs generated dynamically -->
@@ -926,10 +931,6 @@
             
             <div class="space-y-3 mt-4" id="modal-task-list">
                 <!-- Checklist Items Generated Here -->
-            </div>
-            
-            <div class="mt-6 flex justify-end">
-                <button class="btn-cyber px-6 py-2 text-xs font-bold tracking-widest uppercase" onclick="saveActionPlanUpdates()">Save Updates</button>
             </div>
         </div>
     </div>
@@ -966,7 +967,14 @@
         let myChart1, myChart2, myChart3;
         let globalTeacherList = []; 
         let globalClassesList = [];
+        let globalEditedAttendance = []; // STAGING AREA UNTUK SLIP PDF
         
+        // --- FORMAT IDR ---
+        const formatRp = (num) => {
+            if(!num) return 'Rp0';
+            return 'Rp' + Number(num).toLocaleString('id-ID');
+        };
+
         // --- TOAST NOTIFICATIONS ---
         function showToast(message, type = 'info') {
             const container = document.getElementById('toast-container');
@@ -1133,7 +1141,6 @@
 
             btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> AUTHENTICATING...'; btn.disabled = true;
             
-            // DYNAMIC CALL
             const res = await postAPI('login', {username: usernameInput, password: passwordInput});
             
             if(res && res.status === 'success') {
@@ -1144,7 +1151,7 @@
                 switchTab('tab-home'); 
                 showToast('Uplink Established.', 'success');
                 
-                // Fetch Global Data (Teachers & Classes) in background
+                // Fetch Global Data
                 fetchGlobalData();
             } else {
                 showToast(res?.message || 'Login Failed', 'error');
@@ -1186,7 +1193,7 @@
             // Dynamic Load per tab
             if(tabId === 'tab-home') loadHomeData();
             else if(tabId === 'tab-overview') loadDashboard();
-            else if(tabId === 'tab-attendance') { loadAttendance(); loadEditAttendance(); }
+            else if(tabId === 'tab-attendance') loadAttendance();
             else if(tabId === 'tab-cico') loadCICO();
             else if(tabId === 'tab-replacement') { loadInfalLog(); loadJPRecap(); }
             else if(tabId === 'tab-performance') loadAdditionalScoreModules();
@@ -1210,11 +1217,14 @@
             activeBtn.classList.add(`dark:text-${colorClassDark}`, `dark:border-${colorClassDark}`, `text-${colorClassLightText}`, `border-${colorClassLightText}`);
         }
 
-        function openModal(modalId) { document.getElementById(modalId).classList.add('active'); }
+        function openModal(modalId) { 
+            if(modalId === 'edit-attendance-modal') loadEditAttendance(); // Auto load data when modal opens
+            document.getElementById(modalId).classList.add('active'); 
+        }
         function closeModal(modalId) { document.getElementById(modalId).classList.remove('active'); }
 
         // ==========================================
-        // DYNAMIC DATA FETCHING (NO DUMMY)
+        // DYNAMIC DATA FETCHING
         // ==========================================
         
         async function loadHomeData(silent = false) { 
@@ -1256,6 +1266,27 @@
             document.getElementById('archive-notes-container').innerHTML = archiveHtml;
         }
 
+        async function saveNoteToAPI(type) {
+            const text = document.getElementById('note-input-text').value;
+            if(!text) return;
+            const payload = { action: 'add', id: 'N' + new Date().getTime(), text: text, type: type };
+            const res = await postAPI('syncNotes', payload);
+            if(res && res.status === 'success') {
+                document.getElementById('note-input-text').value = '';
+                loadHomeData(true);
+            }
+        }
+        
+        async function markNoteDone(id) {
+            const res = await postAPI('syncNotes', { action: 'complete', id: id });
+            if(res && res.status === 'success') loadHomeData(true);
+        }
+        
+        async function deleteNote(id) {
+            const res = await postAPI('syncNotes', { action: 'delete', id: id });
+            if(res && res.status === 'success') loadHomeData(true);
+        }
+
         async function loadDashboard(silent = false) { 
             const dashCards = document.getElementById('dashboard-cards');
             if(!silent) dashCards.innerHTML = `<div class="cyber-panel p-4 col-span-full flex items-center justify-center h-24 text-blue-600 dark:text-neoncyan"><i class="fas fa-circle-notch fa-spin text-2xl mr-3"></i> <span class="tracking-widest text-sm font-bold">SYNCING DATA CORE...</span></div>`;
@@ -1275,7 +1306,6 @@
                     <div class="cyber-panel p-4 border-l-4 border-l-blue-500 dark:border-l-neonblue flex flex-col justify-between bg-blue-50 dark:bg-gradient-to-br dark:from-neonblue/10 dark:to-transparent transition-colors"><div class="text-[9px] text-blue-600 dark:text-neoncyan tracking-[0.2em] uppercase mb-2 font-bold">Active Protocol</div><div class="text-3xl font-mono font-bold text-lighttext dark:text-white neon-glow-cyan">${d.totalInfal || 0} <span class="text-sm font-sans text-blue-600 dark:text-neoncyan">SES</span></div></div>
                 `;
                 
-                // Charts Data
                 let totalAbsen = (d.chartKehadiran.hadir || 0) + (d.chartKehadiran.tidakHadir || 0);
                 let pctHadir = totalAbsen > 0 ? Math.round(((d.chartKehadiran.hadir || 0)/totalAbsen)*100) : 0;
                 document.getElementById('pct-hadir').innerText = pctHadir + '%';
@@ -1291,7 +1321,6 @@
                 document.getElementById('pct-infal').innerText = pctInfal + '%';
                 myChart3 = renderDonutChart('chartInfal', myChart3, ['Normal', 'Replaced'], [d.chartInfal.normal || 0, d.chartInfal.infal || 0], ['#0077b6', '#ff007f']); 
                 
-                // Lists
                 let logHtml = d.infalTerakhir && d.infalTerakhir.length > 0 ? d.infalTerakhir.map(i => `<div class="border-b custom-border pb-2 mb-2"><p class="text-[10px] text-muted">${formatDate(i.Tanggal)} | ${i.Sesi_JP}</p><p class="text-xs font-bold text-lighttext dark:text-white">${i.Kelas}</p><p class="text-[10px]"><span class="text-neonpink">${i['Guru Keluar']}</span> <i class="fas fa-arrow-right text-muted text-[8px] mx-1"></i> <span class="text-neongreen">${i['Guru Pengganti']}</span></p></div>`).join('') : '<div class="h-full flex items-center justify-center text-muted italic text-xs">No records found</div>';
                 document.getElementById('dash-log-recent').innerHTML = logHtml;
                 
@@ -1300,7 +1329,6 @@
                 
                 if(!silent) showToast('Analytics Refreshed', 'success');
             } else {
-                // Fallback on error so it doesn't spin forever
                 dashCards.innerHTML = `<div class="cyber-panel p-4 col-span-full flex items-center justify-center h-24 text-red-500"><i class="fas fa-exclamation-triangle text-2xl mr-3"></i> <span class="tracking-widest text-sm font-bold">API FAILED TO LOAD</span></div>`;
             }
         }
@@ -1316,24 +1344,85 @@
             const endD = document.getElementById('att-date-end').value;
             
             const res = await fetchAPI('getAttendance', {startDate: startD, endDate: endD});
-            if(res && res.status === 'success' && res.data && res.data.length > 0) {
-                tbody.innerHTML = res.data.map(d => {
-                    let stClass = d.status === 'Tepat Waktu' ? 'bg-neongreen/20 text-green-600 dark:text-neongreen border-neongreen/50' : (d.status === 'Terlambat' ? 'bg-neonyellow/20 text-orange-600 dark:text-neonyellow border-neonyellow/50' : 'bg-neonpink/20 text-red-600 dark:text-neonpink border-neonpink/50');
-                    return `<tr class="hover:bg-blue-50 dark:hover:bg-neoncyan/5 transition-colors">
-                        <td class="p-4 text-xs font-mono text-muted">${formatDate(d.tanggal)}</td>
-                        <td class="p-4 text-xs font-bold text-lighttext dark:text-white">${d.nama_guru}</td>
-                        <td class="p-4 text-xs text-center font-mono">${d.target_masuk}</td>
-                        <td class="p-4 text-xs text-center font-mono font-bold text-blue-600 dark:text-neoncyan">${d.waktu_scan}</td>
-                        <td class="p-4 text-xs text-center font-mono ${d.durasi_telat > 0 ? 'text-red-500' : 'text-green-500'}">${d.durasi_telat > 0 ? '+'+d.durasi_telat+'m' : '0m'}</td>
-                        <td class="p-4 text-center"><span class="text-[9px] font-bold px-2 py-1 rounded border ${stClass} uppercase tracking-wider">${d.status}</span></td>
-                    </tr>`;
-                }).join('');
+            if(res && res.status === 'success' && res.data) {
+                // 1. Render Log Harian ke Tabel Utama (Menampilkan Scan In Saja)
+                if(res.data.logHarian && res.data.logHarian.length > 0) {
+                    tbody.innerHTML = res.data.logHarian.map(d => {
+                        let stClass = d.status === 'Tepat Waktu' ? 'bg-neongreen/20 text-green-600 dark:text-neongreen border-neongreen/50' : (d.status === 'Terlambat' ? 'bg-neonyellow/20 text-orange-600 dark:text-neonyellow border-neonyellow/50' : 'bg-neonpink/20 text-red-600 dark:text-neonpink border-neonpink/50');
+                        let varianText = d.durasi_telat > 0 ? `<span class="text-red-500 font-bold">+${d.durasi_telat}m</span><br><span class="text-[9px] text-neonpink">${formatRp(d.denda)}</span>` : `<span class="text-green-500">0m</span>`;
+                        return `<tr class="hover:bg-blue-50 dark:hover:bg-neoncyan/5 transition-colors">
+                            <td class="p-4 text-xs font-mono text-muted">${formatDate(d.tanggal)}</td>
+                            <td class="p-4 text-xs font-bold text-lighttext dark:text-white">${d.nama_guru}</td>
+                            <td class="p-4 text-xs text-center font-mono">${d.target_masuk}</td>
+                            <td class="p-4 text-xs text-center font-mono font-bold text-blue-600 dark:text-neoncyan">${d.waktu_scan}</td>
+                            <td class="p-4 text-xs text-center font-mono">${varianText}</td>
+                            <td class="p-4 text-center"><span class="text-[9px] font-bold px-2 py-1 rounded border ${stClass} uppercase tracking-wider">${d.status}</span></td>
+                        </tr>`;
+                    }).join('');
+                } else {
+                    tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 italic text-muted">No records found for specified timeline.</td></tr>`;
+                }
+
+                // 2. Simpan Rekap Guru ke Variabel Global (Staging Area)
+                if(res.data.rekapGuru) {
+                    globalEditedAttendance = res.data.rekapGuru; 
+                }
             } else {
-                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 italic text-muted">No records found for specified timeline.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 italic text-muted text-red-500">API Sync Failed.</td></tr>`;
             }
         }
         function clearAttFilter() { document.getElementById('att-date-start').value = getLocalYYYYMMDD(); document.getElementById('att-date-end').value = getLocalYYYYMMDD(); loadAttendance(); }
         
+        // MODAL EDIT ATTENDANCE: Melakukan staging / validasi manual
+        function loadEditAttendance() {
+            const tbody = document.getElementById('edit-att-tbody');
+            if(!globalEditedAttendance || globalEditedAttendance.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-muted italic text-red-500">Klik ikon sync/search di tabel utama terlebih dahulu untuk memuat data.</td></tr>`;
+                return;
+            }
+
+            let html = '';
+            globalEditedAttendance.forEach((g, idx) => {
+                let safeName = g.nama.replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_]/g, '');
+                html += `<tr class="hover:bg-blue-50 dark:hover:bg-neoncyan/5">
+                <td class="p-2 font-bold text-xs"><input type="hidden" id="edit_nama_${idx}" value="${g.nama}">${g.nama}</td>
+                <td class="p-2 text-center"><input type="number" id="edit_hadir_${idx}" class="w-12 bg-transparent border-b border-gray-300 dark:border-gray-700 text-center font-mono outline-none focus:border-neoncyan text-green-600" value="${g.hadir}"></td>
+                <td class="p-2 text-center"><input type="number" id="edit_sakit_${idx}" class="w-12 bg-transparent border-b border-gray-300 dark:border-gray-700 text-center font-mono outline-none focus:border-neoncyan text-blue-500" value="${g.sakit}"></td>
+                <td class="p-2 text-center"><input type="number" id="edit_izin_${idx}" class="w-12 bg-transparent border-b border-gray-300 dark:border-gray-700 text-center font-mono outline-none focus:border-neoncyan text-orange-500" value="${g.izin}"></td>
+                <td class="p-2 text-center"><input type="number" id="edit_alpa_${idx}" class="w-12 bg-transparent border-b border-gray-300 dark:border-gray-700 text-center font-mono outline-none focus:border-neoncyan text-red-500" value="${g.alpa}"></td>
+                <td class="p-2 text-center"><input type="number" id="edit_denda_${idx}" class="w-24 bg-transparent border-b border-neonpink/50 text-center font-mono outline-none focus:border-neonpink text-neonpink font-bold" value="${g.totalPotongan}">
+                <input type="hidden" id="edit_telat_${idx}" value="${g.totalTelatMenit}"></td>
+                </tr>`;
+            });
+            tbody.innerHTML = html;
+        }
+
+        function saveAttendanceEdit() {
+            if(!globalEditedAttendance || globalEditedAttendance.length === 0) return;
+            
+            // Loop inputs and update global array
+            for(let i=0; i<globalEditedAttendance.length; i++) {
+                let nHadir = document.getElementById(`edit_hadir_${i}`).value;
+                let nSakit = document.getElementById(`edit_sakit_${i}`).value;
+                let nIzin = document.getElementById(`edit_izin_${i}`).value;
+                let nAlpa = document.getElementById(`edit_alpa_${i}`).value;
+                let nDenda = document.getElementById(`edit_denda_${i}`).value;
+                let nTelat = document.getElementById(`edit_telat_${i}`).value; // Tetap simpan menitnya
+
+                globalEditedAttendance[i] = {
+                    nama: document.getElementById(`edit_nama_${i}`).value,
+                    hadir: parseInt(nHadir) || 0,
+                    sakit: parseInt(nSakit) || 0,
+                    izin: parseInt(nIzin) || 0,
+                    alpa: parseInt(nAlpa) || 0,
+                    totalTelatMenit: parseInt(nTelat) || 0,
+                    totalPotongan: parseInt(nDenda) || 0
+                };
+            }
+            showToast('Data Staging Tersimpan. Siap untuk diexport.', 'success'); 
+            closeModal('edit-attendance-modal');
+        }
+
         async function loadCICO(silent = false) { 
             if(!silent) showToast('Radar Scanning...', 'info'); 
             const tbody = document.getElementById('table-cico-body');
@@ -1362,31 +1451,60 @@
         }
         function clearCicoFilter() { document.getElementById('cico-date-start').value = getLocalYYYYMMDD(); document.getElementById('cico-date-end').value = getLocalYYYYMMDD(); loadCICO(); }
 
-        // --- NEW: EDIT ATTENDANCE RECAP MOCK (NOW DYNAMIC) ---
-        async function loadEditAttendance() {
-            const tbody = document.getElementById('edit-att-tbody');
-            tbody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-muted italic"><i class="fas fa-spinner fa-spin"></i> Mengambil data...</td></tr>`;
+        // INFAL RADAR & TRACKER
+        async function loadStandbyRadar() {
+            const hari = document.getElementById('radar-hari').value;
+            const jp = document.getElementById('radar-jp').value;
+            const resEl = document.getElementById('radar-results');
+            resEl.innerHTML = `<div class="h-full flex items-center justify-center text-muted italic text-xs"><i class="fas fa-circle-notch fa-spin mr-2"></i> Scanning...</div>`;
             
-            // In a real app, this would fetch actual manual recap limits. 
-            // We use globalTeacherList to populate default 0s if no API exists yet.
-            if(globalTeacherList.length > 0) {
-                let html = '';
-                globalTeacherList.forEach(t => {
-                    html += `<tr class="hover:bg-blue-50 dark:hover:bg-neoncyan/5"><td class="p-2 font-bold text-xs">${t}</td>
-                    <td class="p-2 text-center"><input type="number" id="edit_hadir_${t.replace(/\s+/g,'')}" class="w-12 bg-transparent border-b border-gray-300 dark:border-gray-700 text-center font-mono outline-none focus:border-neoncyan text-green-600" value="0"></td>
-                    <td class="p-2 text-center"><input type="number" id="edit_sakit_${t.replace(/\s+/g,'')}" class="w-12 bg-transparent border-b border-gray-300 dark:border-gray-700 text-center font-mono outline-none focus:border-neoncyan text-blue-500" value="0"></td>
-                    <td class="p-2 text-center"><input type="number" id="edit_izin_${t.replace(/\s+/g,'')}" class="w-12 bg-transparent border-b border-gray-300 dark:border-gray-700 text-center font-mono outline-none focus:border-neoncyan text-orange-500" value="0"></td>
-                    <td class="p-2 text-center"><input type="number" id="edit_alpa_${t.replace(/\s+/g,'')}" class="w-12 bg-transparent border-b border-gray-300 dark:border-gray-700 text-center font-mono outline-none focus:border-neoncyan text-red-500" value="0"></td></tr>`;
-                });
-                tbody.innerHTML = html;
+            const res = await fetchAPI('getStandbyTeachers', { hari: hari, jp: jp });
+            if(res && res.status === 'success' && res.data.length > 0) {
+                resEl.innerHTML = res.data.map(g => `<div class="border-b custom-border py-2 flex justify-between items-center"><span class="text-xs font-bold text-lighttext dark:text-gray-200"><i class="fas fa-user-circle text-neongreen mr-2"></i> ${g['Nama Guru']}</span><span class="text-[9px] px-2 py-0.5 border border-neongreen text-neongreen rounded">STANDBY</span></div>`).join('');
             } else {
-                tbody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-muted italic">Guru tidak ditemukan / Sync gagal.</td></tr>`;
+                resEl.innerHTML = `<div class="h-full flex items-center justify-center text-red-500 italic text-xs">Tidak ada guru standby di sesi ini.</div>`;
             }
         }
+        function clearStandbyRadar() { document.getElementById('radar-results').innerHTML = `<div class="h-full flex items-center justify-center text-muted italic text-xs">Awaiting input coordinates...</div>`; }
 
-        async function saveAttendanceEdit() {
-            showToast('Data Rekap Tersimpan (Mock)', 'success'); 
-            closeModal('edit-attendance-modal');
+        async function loadPersonalTracker() {
+            const hari = document.getElementById('tracker-hari').value;
+            const guru = document.getElementById('tracker-guru').value;
+            const resEl = document.getElementById('tracker-results');
+            if(!guru) { showToast('Pilih guru terlebih dahulu', 'error'); return; }
+            resEl.innerHTML = `<div class="h-full flex items-center justify-center text-muted italic text-xs"><i class="fas fa-circle-notch fa-spin mr-2"></i> Tracking...</div>`;
+            
+            const res = await fetchAPI('getPersonalSchedule', { hari: hari, nama: guru });
+            if(res && res.status === 'success' && res.data.length > 0) {
+                resEl.innerHTML = res.data.map(j => `<div class="border-b custom-border py-2"><p class="text-[10px] text-neonyellow font-bold mb-1">${j['Sesi_JP']}</p><p class="text-xs font-bold text-lighttext dark:text-white">${j['Mata_Pelajaran']} <span class="text-muted text-[10px] ml-2">@ ${j['ID Kelas']}</span></p></div>`).join('');
+            } else {
+                resEl.innerHTML = `<div class="h-full flex items-center justify-center text-muted italic text-xs">Tidak ada jadwal ditemukan.</div>`;
+            }
+        }
+        function clearPersonalTracker() { document.getElementById('tracker-results').innerHTML = `<div class="h-full flex items-center justify-center text-muted italic text-xs">Awaiting target selection...</div>`; }
+
+        async function saveInfal() {
+            const btn = document.getElementById('btn-save-infal');
+            const payload = {
+                tanggal: document.getElementById('infal-tgl').value,
+                sesi_jp: document.getElementById('infal-jp').value,
+                id_kelas: document.getElementById('infal-kelas').value,
+                alasan: document.getElementById('infal-alasan').value,
+                guru_keluar: document.getElementById('infal-keluar').value,
+                guru_pengganti: document.getElementById('infal-masuk').value
+            };
+            if(!payload.tanggal || !payload.id_kelas || !payload.guru_keluar || !payload.guru_pengganti) { showToast('Lengkapi semua data Infal!', 'error'); return; }
+            
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> TRANSMITTING...'; btn.disabled = true;
+            const res = await postAPI('saveInfal', payload);
+            if(res && res.status === 'success') {
+                showToast('Protokol Infal Dieksekusi', 'success');
+                document.getElementById('infal-keluar').value = ''; document.getElementById('infal-masuk').value = '';
+                loadInfalLog();
+            } else {
+                showToast('Gagal memproses Infal', 'error');
+            }
+            btn.innerHTML = '<i class="fas fa-upload"></i> TRANSMIT DATA'; btn.disabled = false;
         }
 
         async function loadInfalLog() {
@@ -1394,7 +1512,7 @@
             const tbody = document.getElementById('table-infal-history-body');
             tbody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-muted italic"><i class="fas fa-spinner fa-spin"></i> Memuat log...</td></tr>`;
             
-            const res = await fetchAPI('getDashboard', {startDate: date, endDate: date}); // Using getDashboard since it returns infalTerakhir
+            const res = await fetchAPI('getDashboard', {startDate: date, endDate: date}); 
             if(res && res.status === 'success' && res.data && res.data.infalTerakhir && res.data.infalTerakhir.length > 0) {
                 tbody.innerHTML = res.data.infalTerakhir.map(i => `<tr class="hover:bg-blue-50 dark:hover:bg-neoncyan/5"><td class="p-2 font-mono text-muted text-[10px]">${i.Sesi_JP}</td><td class="p-2 font-bold text-xs">${i.Kelas}</td><td class="p-2 font-bold text-xs text-rose-600 dark:text-neonpink">${i['Guru Keluar']}</td><td class="p-2 font-bold text-xs text-green-600 dark:text-neongreen">${i['Guru Pengganti']}</td><td class="p-2 italic text-[10px] text-muted">${i.Alasan}</td></tr>`).join('');
             } else {
@@ -1416,134 +1534,85 @@
             }
         }
 
-        // --- DYNAMIC EVENTS & COMMISSIONS ---
-        async function loadEventData() {
-            let container = document.getElementById('event-list-container');
-            container.innerHTML = `<div class="cyber-panel p-5 text-center text-muted italic col-span-full h-32 flex items-center justify-center border-dashed custom-border"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</div>`;
-            // Mock API Fetch for now if backend not fully ready for Action Plans
-            setTimeout(() => {
-                let cardHtml = `
-                <div class="cyber-panel p-5 dark:border-neonyellow/30 border-orange-300 hover:-translate-y-1 transition cursor-pointer" onclick="openActionPlan('Study Tour 2026', 'Ustadz Ahmad')">
-                    <div class="flex justify-between items-center mb-2">
-                        <h4 class="font-bold text-lighttext dark:text-white tracking-widest text-xs md:text-sm uppercase truncate pr-2">Study Tour 2026</h4>
-                        <span class="text-[9px] bg-orange-100 dark:bg-neonyellow/20 text-orange-600 dark:text-neonyellow border border-orange-200 dark:border-neonyellow/50 px-2 py-0.5 rounded font-bold whitespace-nowrap">PIC: Ustadz Ahmad</span>
-                    </div>
-                    <div class="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-1.5 mb-1 mt-4">
-                        <div class="bg-gradient-to-r from-orange-400 to-yellow-400 h-1.5 rounded-full shadow-md" style="width: 60%"></div>
-                    </div>
-                    <p class="text-right text-[10px] font-mono text-muted mb-2 tracking-widest">60% COMPLETED</p>
-                    <div class="text-[10px] text-muted font-bold tracking-widest uppercase flex items-center gap-1 mt-2 border-t custom-border pt-2"><i class="fas fa-tasks"></i> Click to view Action Plans</div>
-                </div>`;
-                container.innerHTML = cardHtml;
-            }, 500);
-        }
-
-        async function loadLeaderEventData() {
-            let container = document.getElementById('event-score-container');
-            container.innerHTML = `<div class="cyber-panel p-5 text-center text-muted italic col-span-full h-32 flex items-center justify-center border-dashed custom-border"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</div>`;
-            setTimeout(() => {
-                container.innerHTML = `
-                <div class="cyber-panel p-5 cursor-pointer hover:border-neonyellow transition" onclick="openInputScore('Leader Score: Study Tour', 'Ustadz Ahmad')">
-                    <div class="flex justify-between items-center"><h4 class="font-bold text-lighttext dark:text-white tracking-widest text-xs uppercase truncate pr-2">Study Tour 2026</h4><span class="text-[9px] bg-orange-100 dark:bg-neonyellow/20 text-orange-600 dark:text-neonyellow border border-orange-200 dark:border-neonyellow/50 px-2 py-0.5 rounded font-bold whitespace-nowrap">PIC: Ustadz Ahmad</span></div>
-                    <p class="text-[10px] text-muted font-bold mt-3"><i class="fas fa-edit"></i> Klik untuk menilai performa kepanitiaan</p>
-                </div>`;
-            }, 500);
-        }
-
-        async function loadCommissionData() {
-            let container = document.getElementById('comm-list-container');
-            container.innerHTML = `<div class="cyber-panel p-5 text-center text-muted italic col-span-full h-32 flex items-center justify-center border-dashed custom-border"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</div>`;
-            setTimeout(() => {
-                let cardHtml = `
-                <div class="cyber-panel p-5 dark:border-neonpink/30 border-pink-300 hover:-translate-y-1 transition cursor-pointer" onclick="openActionPlan('PPDB Agent 2026', 'Ustadzah Siti')">
-                    <div class="flex justify-between items-center mb-2">
-                        <h4 class="font-bold text-lighttext dark:text-white tracking-widest text-xs md:text-sm uppercase truncate pr-2">PPDB Agent 2026</h4>
-                        <span class="text-[9px] bg-pink-100 dark:bg-neonpink/20 text-pink-600 dark:text-neonpink border border-pink-200 dark:border-neonpink/50 px-2 py-0.5 rounded font-bold whitespace-nowrap">PIC: Ustadzah Siti</span>
-                    </div>
-                    <div class="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-1.5 mb-1 mt-4">
-                        <div class="bg-gradient-to-r from-pink-500 to-purple-500 h-1.5 rounded-full shadow-md" style="width: 33%"></div>
-                    </div>
-                    <p class="text-right text-[10px] font-mono text-muted mb-2 tracking-widest">33% COMPLETED</p>
-                    <div class="text-[10px] text-muted font-bold tracking-widest uppercase flex items-center gap-1 mt-2 border-t custom-border pt-2"><i class="fas fa-tasks"></i> Click to view Action Plans</div>
-                </div>`;
-                container.innerHTML = cardHtml;
-            }, 500);
-        }
-
-        async function loadLeaderCommissionData() {
-            let container = document.getElementById('comm-score-container');
-            container.innerHTML = `<div class="cyber-panel p-5 text-center text-muted italic col-span-full h-32 flex items-center justify-center border-dashed custom-border"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</div>`;
-            setTimeout(() => {
-                container.innerHTML = `
-                <div class="cyber-panel p-5 cursor-pointer hover:border-neonpink transition" onclick="openInputScore('Commission Score: PPDB Agent', 'Ustadzah Siti')">
-                    <div class="flex justify-between items-center"><h4 class="font-bold text-lighttext dark:text-white tracking-widest text-xs uppercase truncate pr-2">PPDB Agent 2026</h4><span class="text-[9px] bg-pink-100 dark:bg-neonpink/20 text-pink-600 dark:text-neonpink border border-pink-200 dark:border-neonpink/50 px-2 py-0.5 rounded font-bold whitespace-nowrap">PIC: Ustadzah Siti</span></div>
-                    <p class="text-[10px] text-muted font-bold mt-3"><i class="fas fa-edit"></i> Klik untuk menilai performa komisi</p>
-                </div>`;
-            }, 500);
-        }
-
-        function openActionPlan(title, picName) {
-            document.getElementById('modal-title-ap').innerText = title + " - Action Plans";
-            document.getElementById('modal-subtitle-ap').innerText = "PIC: " + picName;
+        // ==========================================
+        // PERFORMANCE SUPERVISION & ADDITIONAL SCORES
+        // ==========================================
+        async function saveSupervisionToAPI() {
+            const btn = document.getElementById('btn-save-supervision');
+            const payload = {
+                teacher: document.getElementById('obs-teacher').value,
+                grade: document.getElementById('obs-grade').value,
+                subject: document.getElementById('obs-subject').value,
+                supervisor: document.getElementById('obs-supervisor').value,
+                totalSkor: document.getElementById('obs-score-val').innerText,
+                persentase: document.getElementById('obs-pct-val').innerText.replace('%',''),
+                predikat: document.getElementById('obs-predicate').innerText
+            };
+            if(!payload.teacher || !payload.supervisor || payload.totalSkor == '0') { showToast('Lengkapi data observasi dan lakukan penilaian', 'error'); return; }
             
-            // Dynamic render mock
-            document.getElementById('modal-task-list').innerHTML = `
-                <div class="border custom-border p-3 rounded bg-gray-50 dark:bg-darkbg hover:border-blue-500 transition">
-                    <div class="flex justify-between items-center mb-2">
-                        <span class="text-sm font-bold text-lighttext dark:text-gray-200">1. Tugas API (Contoh)</span>
-                        <span class="text-[10px] font-bold px-2 py-0.5 rounded border border-neongreen text-neongreen bg-neongreen/10">DONE</span>
-                    </div>
-                    <div class="flex gap-2 items-center">
-                        <i class="fab fa-google-drive text-gray-400"></i>
-                        <input type="text" class="flex-1 bg-transparent border-b border-gray-300 dark:border-gray-700 text-xs text-blue-500 outline-none p-1" placeholder="Paste Google Drive Link here..." value="https://drive.google.com/open?id=123xyz">
-                        <button onclick="window.open('https://drive.google.com/open?id=123xyz', '_blank')" class="text-[10px] bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 px-2 py-1 rounded hover:bg-blue-200 transition font-bold">Open Link</button>
-                    </div>
-                </div>`;
-            
-            openModal('action-plan-modal');
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> SAVING...'; btn.disabled = true;
+            const res = await postAPI('saveSupervision', payload);
+            if(res && res.status === 'success') {
+                showToast('Laporan Supervisi Tersimpan', 'success');
+                loadSupervisionHistory();
+            } else { showToast('Gagal menyimpan supervisi', 'error'); }
+            btn.innerHTML = '<i class="fas fa-save"></i> Save Report'; btn.disabled = false;
         }
 
-        // --- NEW: ADDITIONAL SCORING DYNAMIC ---
+        async function loadSupervisionHistory() {
+            const tbody = document.getElementById('supervision-history-tbody');
+            tbody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-muted italic"><i class="fas fa-spinner fa-spin"></i> Syncing...</td></tr>`;
+            const res = await fetchAPI('getSupervisionHistory');
+            if(res && res.status === 'success' && res.data.length > 0) {
+                tbody.innerHTML = res.data.map(h => `<tr><td class="pb-2 pt-2 text-[10px] text-muted">${formatDate(h.tanggal)}</td><td class="pb-2 pt-2 font-bold">${h.guru}</td><td class="pb-2 pt-2 text-center text-neoncyan font-mono">${h.skor}</td><td class="pb-2 pt-2 text-center text-[10px]">${h.predikat}</td></tr>`).join('');
+            } else {
+                tbody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-muted italic">Belum ada riwayat.</td></tr>`;
+            }
+        }
+
         async function loadAdditionalScoreModules() {
             // For now, render empty state if API is not there
             const container = document.getElementById('additional-score-cards');
             container.innerHTML = `
                 <div class="cyber-panel p-5 text-center text-muted italic flex flex-col items-center justify-center h-40 col-span-full">
                     <i class="fas fa-box-open text-3xl mb-2 opacity-50"></i>
-                    <p class="text-xs">Belum ada modul penilaian tambahan yang aktif.</p>
+                    <p class="text-xs">Klik "Buat Penilaian" untuk memulai modul baru.</p>
                 </div>
             `;
         }
 
         function saveNewAdditionalScore() {
             const name = document.getElementById('new-score-name').value;
-            if(!name) { showToast('Nama penilaian wajib diisi', 'error'); return; }
+            const period = document.getElementById('new-score-period').value;
+            if(!name || !period) { showToast('Nama & Periode wajib diisi', 'error'); return; }
             
             const container = document.getElementById('additional-score-cards');
             if(container.innerHTML.includes('Belum ada modul')) container.innerHTML = '';
             
-            container.innerHTML += `<div class="cyber-panel p-5 cursor-pointer hover:border-neoncyan transition" onclick="openInputScore('${name}', 'Semua Guru')"><div class="flex justify-between items-center mb-3"><h4 class="font-bold text-lighttext dark:text-white tracking-widest text-sm uppercase truncate">${name}</h4></div><div class="flex justify-between items-center text-[10px] text-muted font-bold"><p><i class="fas fa-users"></i> Target: Semua Guru</p><p class="text-neoncyan">KLIK UNTUK MENILAI <i class="fas fa-arrow-right"></i></p></div></div>`;
+            container.innerHTML += `<div class="cyber-panel p-5 cursor-pointer hover:border-neoncyan transition" onclick="openInputScore('${name}', 'Semua Guru', 'Additional', '${period}')"><div class="flex justify-between items-center mb-3"><h4 class="font-bold text-lighttext dark:text-white tracking-widest text-sm uppercase truncate">${name}</h4></div><div class="flex justify-between items-center text-[10px] text-muted font-bold"><p><i class="fas fa-users"></i> Target: Semua Guru</p><p class="text-neoncyan">KLIK UNTUK MENILAI <i class="fas fa-arrow-right"></i></p></div></div>`;
             
             closeModal('add-score-modal');
             showToast('Modul Penilaian Dibuat', 'success');
         }
 
-        function openInputScore(title, target) {
+        function openInputScore(title, target, type, subContext = '') {
             document.getElementById('input-score-title').innerText = title;
             document.getElementById('input-score-target').innerText = "Target: " + target;
+            document.getElementById('input-score-type').value = type;
+            document.getElementById('input-score-subcontext').value = subContext;
             
             let html = '';
             if(target === 'Semua Guru' && globalTeacherList.length > 0) {
-                globalTeacherList.forEach(t => {
+                globalTeacherList.forEach((t, idx) => {
                     html += `
-                    <div class="border custom-border p-3 rounded bg-gray-50 dark:bg-darkbg hover:border-blue-500 transition">
+                    <div class="border custom-border p-3 rounded bg-gray-50 dark:bg-darkbg hover:border-blue-500 transition mb-2">
                         <div class="flex justify-between items-center mb-2">
-                            <span class="text-xs font-bold text-lighttext dark:text-gray-200">${t}</span>
-                            <input type="number" class="w-16 bg-transparent border-b border-gray-400 dark:border-gray-600 text-center font-mono outline-none focus:border-neoncyan text-sm font-bold text-blue-600 dark:text-neoncyan" placeholder="Nilai">
+                            <span class="text-xs font-bold text-lighttext dark:text-gray-200"><input type="hidden" id="inpscore_name_${idx}" value="${t}">${t}</span>
+                            <input type="number" id="inpscore_val_${idx}" class="w-16 bg-transparent border-b border-gray-400 dark:border-gray-600 text-center font-mono outline-none focus:border-neoncyan text-sm font-bold text-blue-600 dark:text-neoncyan" placeholder="Nilai">
                         </div>
                         <div class="flex gap-2 items-start mt-2">
                             <i class="fas fa-sticky-note text-neonyellow mt-1 text-[10px]"></i>
-                            <textarea class="flex-1 bg-transparent border-b border-gray-300 dark:border-gray-700 text-[10px] text-lighttext dark:text-gray-300 outline-none resize-none h-8" placeholder="Tambahkan catatan khusus/feedback di sini..."></textarea>
+                            <textarea id="inpscore_kom_${idx}" class="flex-1 bg-transparent border-b border-gray-300 dark:border-gray-700 text-[10px] text-lighttext dark:text-gray-300 outline-none resize-none h-8" placeholder="Tambahkan catatan khusus/feedback di sini..."></textarea>
                         </div>
                     </div>`;
                 });
@@ -1551,12 +1620,12 @@
                 html += `
                     <div class="border custom-border p-3 rounded bg-gray-50 dark:bg-darkbg hover:border-blue-500 transition">
                         <div class="flex justify-between items-center mb-2">
-                            <span class="text-xs font-bold text-lighttext dark:text-gray-200">${target}</span>
-                            <input type="number" class="w-16 bg-transparent border-b border-gray-400 dark:border-gray-600 text-center font-mono outline-none focus:border-neoncyan text-sm font-bold text-blue-600 dark:text-neoncyan" placeholder="Nilai">
+                            <span class="text-xs font-bold text-lighttext dark:text-gray-200"><input type="hidden" id="inpscore_name_0" value="${target}">${target}</span>
+                            <input type="number" id="inpscore_val_0" class="w-16 bg-transparent border-b border-gray-400 dark:border-gray-600 text-center font-mono outline-none focus:border-neoncyan text-sm font-bold text-blue-600 dark:text-neoncyan" placeholder="Nilai">
                         </div>
                         <div class="flex gap-2 items-start mt-2">
                             <i class="fas fa-sticky-note text-neonyellow mt-1 text-[10px]"></i>
-                            <textarea class="flex-1 bg-transparent border-b border-gray-300 dark:border-gray-700 text-[10px] text-lighttext dark:text-gray-300 outline-none resize-none h-8" placeholder="Tambahkan catatan khusus/feedback di sini..."></textarea>
+                            <textarea id="inpscore_kom_0" class="flex-1 bg-transparent border-b border-gray-300 dark:border-gray-700 text-[10px] text-lighttext dark:text-gray-300 outline-none resize-none h-8" placeholder="Tambahkan catatan khusus/feedback di sini..."></textarea>
                         </div>
                     </div>`;
             } else {
@@ -1567,125 +1636,151 @@
             openModal('input-score-modal');
         }
         
-        function submitManualScore() {
-            showToast('Penilaian Tersimpan (Mock)', 'success');
+        async function submitManualScore() {
+            const title = document.getElementById('input-score-title').innerText;
+            const type = document.getElementById('input-score-type').value;
+            const period = document.getElementById('input-score-subcontext').value;
+            
+            let promises = [];
+            
+            // Loop through generated inputs (max 100 as safe limit)
+            for(let i=0; i<100; i++) {
+                let nameEl = document.getElementById(`inpscore_name_${i}`);
+                if(!nameEl) continue;
+                
+                let val = document.getElementById(`inpscore_val_${i}`).value;
+                let kom = document.getElementById(`inpscore_kom_${i}`).value;
+                if(val) {
+                    if(type === 'Additional') {
+                        promises.push(postAPI('saveAdditionalScore', {namaPenilaian: title, periode: period, namaGuru: nameEl.value, skor: val, komentar: kom}));
+                    } else if(type === 'LeaderEvent' || type === 'LeaderComm') {
+                        let actualType = type === 'LeaderEvent' ? 'Event' : 'Comm';
+                        promises.push(postAPI('saveScoring', {type: actualType, contextName: title, subContextName: period, dinilai: nameEl.value, nilai: val, feedback: kom, penilai: 'Leader/Admin'}));
+                    }
+                }
+            }
+            
+            if(promises.length > 0) {
+                showToast('Menyimpan ' + promises.length + ' penilaian...', 'info');
+                await Promise.all(promises);
+                showToast('Penilaian Berhasil Disimpan', 'success');
+            } else {
+                showToast('Tidak ada nilai yang diinput', 'error');
+            }
             closeModal('input-score-modal');
         }
 
         // ==========================================
-        // PERFORMANCE SUPERVISION LOGIC
+        // EVENTS & COMMISSIONS
         // ==========================================
-        
-        async function loadTeacherSubjects() {
-            const t = document.getElementById('obs-teacher').value;
-            if(!t) {
-                document.getElementById('obs-grade').innerHTML = '<option value="">- Waiting Teacher -</option>';
-                document.getElementById('obs-subject').innerHTML = '<option value="">- Waiting Teacher -</option>';
-                return;
+        async function saveEventToAPI() {
+            const payload = {
+                tanggal: document.getElementById('event-date').value,
+                namaEvent: document.getElementById('event-name').value,
+                pic: document.getElementById('event-pic').value
+            };
+            if(!payload.tanggal || !payload.namaEvent || !payload.pic) { showToast('Lengkapi form event', 'error'); return; }
+            document.getElementById('btn-save-event').innerHTML = 'SAVING...';
+            const res = await postAPI('saveEvent', payload);
+            if(res && res.status === 'success') {
+                showToast('Event berhasil di-assign', 'success');
+                document.getElementById('event-name').value = '';
+                loadEventData();
+                loadLeaderEventData();
             }
-            
-            showToast('Loading classes for ' + t, 'info');
-            const res = await fetchAPI('getTeacherClasses', {nama: t});
-            
-            if(res && res.status === 'success' && res.data && res.data.length > 0) {
-                let uniqueClasses = [...new Set(res.data.map(item => item['ID Kelas']))];
-                let uniqueSubjects = [...new Set(res.data.map(item => item['Mata_Pelajaran']))];
-                
-                document.getElementById('obs-grade').innerHTML = uniqueClasses.map(c => `<option value="${c}">${c}</option>`).join('');
-                document.getElementById('obs-subject').innerHTML = uniqueSubjects.map(s => `<option value="${s}">${s}</option>`).join('');
+            document.getElementById('btn-save-event').innerHTML = 'Assign PIC';
+        }
+
+        async function saveCommissionToAPI() {
+            const payload = {
+                tipeKomisi: document.getElementById('comm-type').value,
+                pic: document.getElementById('comm-pic').value
+            };
+            if(!payload.tipeKomisi || !payload.pic) { showToast('Lengkapi form komisi', 'error'); return; }
+            document.getElementById('btn-save-comm').innerHTML = 'SAVING...';
+            const res = await postAPI('saveCommission', payload);
+            if(res && res.status === 'success') {
+                showToast('Komisi berhasil di-assign', 'success');
+                document.getElementById('comm-type').value = '';
+                loadCommissionData();
+                loadLeaderCommissionData();
+            }
+            document.getElementById('btn-save-comm').innerHTML = 'Assign Commission';
+        }
+
+        async function loadEventData() {
+            let container = document.getElementById('event-list-container');
+            container.innerHTML = `<div class="cyber-panel p-5 text-center text-muted italic col-span-full h-32 flex items-center justify-center border-dashed custom-border"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</div>`;
+            const res = await fetchAPI('getAdminEvents');
+            if(res && res.status === 'success' && res.data.length > 0) {
+                container.innerHTML = res.data.map(ev => `
+                <div class="cyber-panel p-5 dark:border-neonyellow/30 border-orange-300 hover:-translate-y-1 transition cursor-pointer" onclick="openActionPlan('${ev.namaEvent}', '${ev.pic}')">
+                    <div class="flex justify-between items-center mb-2">
+                        <h4 class="font-bold text-lighttext dark:text-white tracking-widest text-xs md:text-sm uppercase truncate pr-2">${ev.namaEvent}</h4>
+                        <span class="text-[9px] bg-orange-100 dark:bg-neonyellow/20 text-orange-600 dark:text-neonyellow border border-orange-200 dark:border-neonyellow/50 px-2 py-0.5 rounded font-bold whitespace-nowrap">PIC: ${ev.pic}</span>
+                    </div>
+                    <div class="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-1.5 mb-1 mt-4">
+                        <div class="bg-gradient-to-r from-orange-400 to-yellow-400 h-1.5 rounded-full shadow-md" style="width: ${ev.progress}%"></div>
+                    </div>
+                    <p class="text-right text-[10px] font-mono text-muted mb-2 tracking-widest">${ev.progress}% COMPLETED</p>
+                    <div class="text-[10px] text-muted font-bold tracking-widest uppercase flex items-center gap-1 mt-2 border-t custom-border pt-2"><i class="fas fa-tasks"></i> ${ev.tasks.length} Action Plans</div>
+                </div>`).join('');
             } else {
-                document.getElementById('obs-grade').innerHTML = `<option value="1 INTER 1">1 INTER 1 (Fallback)</option>`;
-                document.getElementById('obs-subject').innerHTML = `<option value="Mathematics">Mathematics (Fallback)</option>`;
+                container.innerHTML = `<div class="cyber-panel p-5 text-center text-muted italic col-span-full h-32 flex items-center justify-center border-dashed custom-border">Belum ada data event.</div>`;
             }
         }
 
-        function renderSupervisionTable() {
-            let tbody = document.getElementById('supervision-tbody');
-            if(!tbody) return;
-            let html = '', currentCat = '';
-            supervisionItems.forEach((item, idx) => {
-                if(item.cat !== currentCat) { html += `<tr class="bg-gray-200 dark:bg-[#050a15] transition-colors"><td colspan="3" class="p-2 text-[10px] font-bold text-muted tracking-widest">${item.cat}</td></tr>`; currentCat = item.cat; }
-                html += `
-                <tr class="hover:bg-blue-50 dark:hover:bg-neoncyan/5 transition-colors">
-                    <td class="p-3 text-center border-r custom-border text-xs text-muted">${item.no}</td>
-                    <td class="p-3 border-r custom-border text-xs">
-                        <div class="flex items-center justify-between">
-                            <span>${item.text}</span>
-                            <button onclick="showRubrik(${idx})" class="text-[9px] text-blue-500 hover:text-blue-700 dark:text-neoncyan dark:hover:text-white border border-blue-300 dark:border-neoncyan/30 rounded px-2 py-0.5 ml-2 whitespace-nowrap transition bg-blue-50 dark:bg-transparent font-bold"> (Details)</button>
-                        </div>
-                    </td>
-                    <td class="p-3 text-center">
-                        <div class="flex justify-center gap-2">
-                            <label class="cursor-pointer flex items-center justify-center w-6 h-6 rounded-full custom-bg-alt border custom-border transition radio-score-label" onclick="handleRadioClick(this)">
-                                <input type="radio" name="score_${item.no}" value="1" class="hidden" onchange="calcSupervision()">
-                                <span class="text-[10px] font-mono text-muted">1</span>
-                            </label>
-                            <label class="cursor-pointer flex items-center justify-center w-6 h-6 rounded-full custom-bg-alt border custom-border transition radio-score-label" onclick="handleRadioClick(this)">
-                                <input type="radio" name="score_${item.no}" value="2" class="hidden" onchange="calcSupervision()">
-                                <span class="text-[10px] font-mono text-muted">2</span>
-                            </label>
-                            <label class="cursor-pointer flex items-center justify-center w-6 h-6 rounded-full custom-bg-alt border custom-border transition radio-score-label" onclick="handleRadioClick(this)">
-                                <input type="radio" name="score_${item.no}" value="3" class="hidden" onchange="calcSupervision()">
-                                <span class="text-[10px] font-mono text-muted">3</span>
-                            </label>
-                            <label class="cursor-pointer flex items-center justify-center w-6 h-6 rounded-full custom-bg-alt border custom-border transition radio-score-label" onclick="handleRadioClick(this)">
-                                <input type="radio" name="score_${item.no}" value="4" class="hidden" onchange="calcSupervision()">
-                                <span class="text-[10px] font-mono text-muted">4</span>
-                            </label>
-                        </div>
-                    </td>
-                </tr>`;
-            });
-            tbody.innerHTML = html;
+        async function loadLeaderEventData() {
+            let container = document.getElementById('event-score-container');
+            container.innerHTML = `<div class="cyber-panel p-5 text-center text-muted italic col-span-full h-32 flex items-center justify-center border-dashed custom-border"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</div>`;
+            const res = await fetchAPI('getAdminEvents');
+            if(res && res.status === 'success' && res.data.length > 0) {
+                container.innerHTML = res.data.map(ev => `
+                <div class="cyber-panel p-5 cursor-pointer hover:border-neonyellow transition" onclick="openInputScore('${ev.namaEvent}', '${ev.pic}', 'LeaderEvent', 'Penilaian Kinerja Panitia')">
+                    <div class="flex justify-between items-center"><h4 class="font-bold text-lighttext dark:text-white tracking-widest text-xs uppercase truncate pr-2">${ev.namaEvent}</h4><span class="text-[9px] bg-orange-100 dark:bg-neonyellow/20 text-orange-600 dark:text-neonyellow border border-orange-200 dark:border-neonyellow/50 px-2 py-0.5 rounded font-bold whitespace-nowrap">PIC: ${ev.pic}</span></div>
+                    <p class="text-[10px] text-muted font-bold mt-3"><i class="fas fa-edit"></i> Klik untuk menilai performa kepanitiaan</p>
+                </div>`).join('');
+            } else { container.innerHTML = `<div class="cyber-panel p-5 text-center text-muted italic col-span-full">Belum ada target event.</div>`; }
         }
 
-        function showRubrik(index) {
-            let item = supervisionItems[index];
-            document.getElementById('rubrik-judul-indikator').innerText = item.no + ". " + item.text;
-            document.getElementById('rubrik-desc-1').innerText = item.desc[0];
-            document.getElementById('rubrik-desc-2').innerText = item.desc[1];
-            document.getElementById('rubrik-desc-3').innerText = item.desc[2];
-            document.getElementById('rubrik-desc-4').innerText = item.desc[3];
-            openModal('rubrik-modal');
+        async function loadCommissionData() {
+            let container = document.getElementById('comm-list-container');
+            container.innerHTML = `<div class="cyber-panel p-5 text-center text-muted italic col-span-full h-32 flex items-center justify-center border-dashed custom-border"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</div>`;
+            const res = await fetchAPI('getAdminCommissions');
+            if(res && res.status === 'success' && res.data.length > 0) {
+                container.innerHTML = res.data.map(comm => `
+                <div class="cyber-panel p-5 dark:border-neonpink/30 border-pink-300 hover:-translate-y-1 transition cursor-pointer" onclick="openActionPlan('${comm.namaKomisi}', '${comm.pic}')">
+                    <div class="flex justify-between items-center mb-2">
+                        <h4 class="font-bold text-lighttext dark:text-white tracking-widest text-xs md:text-sm uppercase truncate pr-2">${comm.namaKomisi}</h4>
+                        <span class="text-[9px] bg-pink-100 dark:bg-neonpink/20 text-pink-600 dark:text-neonpink border border-pink-200 dark:border-neonpink/50 px-2 py-0.5 rounded font-bold whitespace-nowrap">PIC: ${comm.pic}</span>
+                    </div>
+                    <div class="w-full bg-gray-200 dark:bg-gray-800 rounded-full h-1.5 mb-1 mt-4">
+                        <div class="bg-gradient-to-r from-pink-500 to-purple-500 h-1.5 rounded-full shadow-md" style="width: ${comm.progress}%"></div>
+                    </div>
+                    <p class="text-right text-[10px] font-mono text-muted mb-2 tracking-widest">${comm.progress}% PROGRESS</p>
+                    <div class="text-[10px] text-muted font-bold tracking-widest uppercase flex items-center gap-1 mt-2 border-t custom-border pt-2"><i class="fas fa-tasks"></i> ${comm.programs.length} Program Aktif</div>
+                </div>`).join('');
+            } else { container.innerHTML = `<div class="cyber-panel p-5 text-center text-muted italic col-span-full h-32 flex items-center justify-center border-dashed custom-border">Belum ada data komisi.</div>`; }
         }
 
-        function handleRadioClick(lbl) {
-            let name = lbl.querySelector('input').name; let group = document.querySelectorAll(`input[name="${name}"]`);
-            group.forEach(r => {
-                let p = r.parentElement;
-                p.classList.remove('bg-blue-100', 'border-blue-500', 'dark:bg-neoncyan/20', 'dark:border-neoncyan', 'shadow-[0_0_10px_rgba(0,119,182,0.3)]', 'dark:shadow-[0_0_10px_rgba(0,229,255,0.3)]');
-                p.classList.add('custom-bg-alt', 'custom-border');
-                p.querySelector('span').classList.remove('text-blue-700', 'dark:text-neoncyan', 'font-bold');
-                p.querySelector('span').classList.add('text-muted');
-            });
-            lbl.classList.remove('custom-bg-alt', 'custom-border');
-            lbl.classList.add('bg-blue-100', 'border-blue-500', 'dark:bg-neoncyan/20', 'dark:border-neoncyan', 'shadow-[0_0_10px_rgba(0,119,182,0.3)]', 'dark:shadow-[0_0_10px_rgba(0,229,255,0.3)]');
-            lbl.querySelector('span').classList.remove('text-muted');
-            lbl.querySelector('span').classList.add('text-blue-700', 'dark:text-neoncyan', 'font-bold');
+        async function loadLeaderCommissionData() {
+            let container = document.getElementById('comm-score-container');
+            container.innerHTML = `<div class="cyber-panel p-5 text-center text-muted italic col-span-full h-32 flex items-center justify-center border-dashed custom-border"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</div>`;
+            const res = await fetchAPI('getAdminCommissions');
+            if(res && res.status === 'success' && res.data.length > 0) {
+                container.innerHTML = res.data.map(comm => `
+                <div class="cyber-panel p-5 cursor-pointer hover:border-neonpink transition" onclick="openInputScore('${comm.namaKomisi}', '${comm.pic}', 'LeaderComm', 'Evaluasi Kinerja Komisi')">
+                    <div class="flex justify-between items-center"><h4 class="font-bold text-lighttext dark:text-white tracking-widest text-xs uppercase truncate pr-2">${comm.namaKomisi}</h4><span class="text-[9px] bg-pink-100 dark:bg-neonpink/20 text-pink-600 dark:text-neonpink border border-pink-200 dark:border-neonpink/50 px-2 py-0.5 rounded font-bold whitespace-nowrap">PIC: ${comm.pic}</span></div>
+                    <p class="text-[10px] text-muted font-bold mt-3"><i class="fas fa-edit"></i> Klik untuk menilai performa komisi</p>
+                </div>`).join('');
+            } else { container.innerHTML = `<div class="cyber-panel p-5 text-center text-muted italic col-span-full">Belum ada target komisi.</div>`; }
         }
 
-        function calcSupervision() {
-            let total = 0;
-            for(let i=1; i<=20; i++) { let selected = document.querySelector(`input[name="score_${i}"]:checked`); if(selected) total += parseInt(selected.value); }
-            
-            let pct = Math.round((total / 80) * 100);
-            document.getElementById('obs-score-val').innerText = total; document.getElementById('obs-pct-val').innerText = pct + '%';
-            
-            let predicate = '-', pColorDark = 'dark:text-gray-500', pColorLight = 'text-gray-500', glow = '';
-            if(pct >= 86) { predicate = 'BAIK SEKALI'; pColorDark = 'dark:text-neongreen'; pColorLight = 'text-green-600'; glow = 'neon-glow-green'; }
-            else if(pct >= 70) { predicate = 'BAIK'; pColorDark = 'dark:text-neoncyan'; pColorLight = 'text-blue-600'; glow = 'neon-glow-cyan'; }
-            else if(pct >= 55) { predicate = 'CUKUP'; pColorDark = 'dark:text-neonyellow'; pColorLight = 'text-orange-500'; glow = ''; }
-            else if(pct > 0) { predicate = 'KURANG'; pColorDark = 'dark:text-neonpink'; pColorLight = 'text-red-600'; glow = ''; }
-            
-            let pEl = document.getElementById('obs-predicate');
-            pEl.innerText = predicate; 
-            pEl.className = `text-2xl font-bold tracking-widest ${pColorDark} ${pColorLight} ${glow}`;
-        }
-
-        function startObservation() {
-            let teacher = document.getElementById('obs-teacher').value;
-            if(!teacher) { showToast('Pilih guru terlebih dahulu!', 'error'); return; }
-            document.getElementById('observation-table-container').classList.remove('hidden');
+        function openActionPlan(title, picName) {
+            document.getElementById('modal-title-ap').innerText = title + " - Tracker";
+            document.getElementById('modal-subtitle-ap').innerText = "PIC: " + picName;
+            document.getElementById('modal-task-list').innerHTML = `<p class="text-center text-xs text-muted italic my-4">Rincian Action Plan/Laporan terpusat di Master Data Google Sheets. Modal ini disiapkan untuk integrasi v4.</p>`;
+            openModal('action-plan-modal');
         }
 
         // ==========================================
@@ -1704,14 +1799,8 @@
                 btnPrint.disabled = true; btnPrint.classList.add("opacity-50", "cursor-not-allowed");
                 
                 // Reset UI to Empty
-                for(let i=1; i<=10; i++) {
-                    let el = document.getElementById(`rev-val-${i}`);
-                    if(el) el.innerText = 'Pending';
-                }
-                for(let i=1; i<=6; i++) {
-                    let el = document.getElementById(`rev-kom-${i}`);
-                    if(el) el.innerText = 'Waiting API Sync...';
-                }
+                for(let i=1; i<=10; i++) { let el = document.getElementById(`rev-val-${i}`); if(el) el.innerText = 'Pending'; }
+                for(let i=1; i<=6; i++) { let el = document.getElementById(`rev-kom-${i}`); if(el) el.innerText = 'Waiting API Sync...'; }
                 document.getElementById('rev-final-rec').innerText = 'AWAITING COMPLETE DATA';
                 document.getElementById('rev-final-rec').className = 'text-xl font-bold text-gray-400 dark:text-gray-600';
 
@@ -1719,42 +1808,57 @@
                 nameDisplay.innerText = selectEl.value;
                 showToast('Tarik data evaluasi dari API...', 'info');
                 
-                // Simulated API Fetch delay for realism (Replace with real fetchAPI later)
-                setTimeout(() => {
+                const res = await fetchAPI('getPerformanceReview', {nama: selectEl.value});
+                
+                if(res && res.status === 'success' && res.data) {
                     blankState.style.opacity = "0"; setTimeout(() => { blankState.style.zIndex = "-1"; }, 300);
                     contentArea.style.opacity = "1"; contentArea.style.pointerEvents = "auto";
                     btnPrint.disabled = false; btnPrint.classList.remove("opacity-50", "cursor-not-allowed");
                     
-                    // --- APPLY DYNAMIC DATA FALLBACKS ---
-                    document.getElementById('rev-val-1').innerText = "Belum Ada Data";
-                    document.getElementById('rev-val-2').innerText = "Belum Ada Data";
-                    document.getElementById('rev-val-3').innerText = "Belum Ada Data";
-                    document.getElementById('rev-val-4').innerText = "Belum Ada Data";
-                    document.getElementById('rev-val-5').innerText = "Belum Ada Data";
-                    document.getElementById('rev-val-6').innerText = "Belum Ada Data";
-                    document.getElementById('rev-val-7').innerText = "Belum Ada Data";
-                    document.getElementById('rev-val-8').innerText = "Belum Ada Data";
-                    document.getElementById('rev-val-9').innerText = "Belum Ada Data";
-                    document.getElementById('rev-val-10').innerText = "Belum Ada Data";
+                    let d = res.data;
+                    document.getElementById('rev-val-1').innerText = d.val1;
+                    document.getElementById('rev-val-2').innerText = d.val2;
+                    document.getElementById('rev-val-3').innerText = d.val3;
+                    document.getElementById('rev-val-4').innerText = d.val4;
+                    document.getElementById('rev-val-5').innerText = d.val5;
+                    document.getElementById('rev-val-6').innerText = d.val6;
+                    document.getElementById('rev-val-7').innerText = d.val7;
+                    document.getElementById('rev-val-8').innerText = d.val8;
+                    document.getElementById('rev-val-9').innerText = d.val9;
+                    document.getElementById('rev-val-10').innerText = d.val10;
                     
-                    document.getElementById('rev-kom-1').innerText = "-";
-                    document.getElementById('rev-kom-2').innerText = "-";
-                    document.getElementById('rev-kom-3').innerText = "-";
-                    document.getElementById('rev-kom-4').innerText = "-";
-                    document.getElementById('rev-kom-5').innerText = "-";
-                    document.getElementById('rev-kom-6').innerText = "-";
+                    document.getElementById('rev-kom-1').innerText = d.kom1;
+                    document.getElementById('rev-kom-2').innerText = d.kom2;
+                    document.getElementById('rev-kom-3').innerText = d.kom3;
+                    document.getElementById('rev-kom-4').innerText = d.kom4;
+                    document.getElementById('rev-kom-5').innerText = d.kom5;
+                    document.getElementById('rev-kom-6').innerText = d.kom6;
                     
-                    document.getElementById('rev-final-rec').innerText = "INCOMPLETE DATA";
-                    document.getElementById('rev-final-rec').className = "text-xl font-bold text-gray-500 border-2 border-gray-500 px-4 py-1 rounded inline-block mt-2";
-                    
-                    showToast('Data Loaded.', 'success');
-                }, 800);
+                    // Simple Logic for overall status
+                    let isComplete = !Object.values(d).some(v => v === 'Pending');
+                    if(isComplete) {
+                        document.getElementById('rev-final-rec').innerText = "DATA LENGKAP - SIAP CETAK";
+                        document.getElementById('rev-final-rec').className = "text-xl font-bold text-green-600 border-2 border-green-600 px-4 py-1 rounded inline-block mt-2";
+                    } else {
+                        document.getElementById('rev-final-rec').innerText = "INCOMPLETE DATA";
+                        document.getElementById('rev-final-rec').className = "text-xl font-bold text-orange-500 border-2 border-orange-500 px-4 py-1 rounded inline-block mt-2";
+                    }
+                    showToast('Data Evaluasi Berhasil Dimuat.', 'success');
+                } else {
+                    showToast('Gagal menarik data review', 'error');
+                }
             }
         }
 
         function printPDF(type) {
             const area = document.getElementById('print-section');
-            if(type === 'slipGaji') { area.innerHTML = buildSlipPotonganNew(); } 
+            if(type === 'slipGaji') { 
+                if(!globalEditedAttendance || globalEditedAttendance.length === 0) {
+                    showToast('Tarik data & validasi Edit terlebih dahulu!', 'error');
+                    return;
+                }
+                area.innerHTML = buildSlipPotonganNew(); 
+            } 
             else if (type === 'rekapInfal') { area.innerHTML = buildRekapInfalNew(); }
             else if (type === 'perfReview') { area.innerHTML = buildPerformanceReview(); }
             window.print();
@@ -1766,7 +1870,7 @@
             
             // PAGE 1: IDENTITAS & TABEL
             let page1 = `
-            <div class="a4-page-potrait relative text-black bg-white p-[15mm] font-sans">
+            <div class="a4-page-potrait">
                 <div class="flex items-center justify-between border-b-[4px] border-[#001b94] pb-4 mb-6">
                     <div class="flex items-center gap-4">
                         <img src="https://thumbs2.imgbox.com/8c/47/ccEpfNGX_t.png" alt="Logo" class="w-20 h-20 object-contain">
@@ -1874,7 +1978,7 @@
 
             // PAGE 2: KOMENTAR & TANDA TANGAN
             let page2 = `
-            <div class="a4-page-potrait relative text-black bg-white p-[15mm] font-sans">
+            <div class="a4-page-potrait">
                 <div class="flex items-center justify-between border-b-[4px] border-[#001b94] pb-4 mb-6">
                     <div class="flex items-center gap-4">
                         <img src="https://thumbs2.imgbox.com/8c/47/ccEpfNGX_t.png" alt="Logo" class="w-20 h-20 object-contain">
@@ -1934,7 +2038,6 @@
                     <p class="text-lg font-black text-[#001b94]">${document.getElementById('rev-final-rec').innerText}</p>
                 </div>
                 
-                <!-- TANDA TANGAN KEPSEK -->
                 <div class="mt-8 flex justify-between px-10">
                     <div class="text-left w-64 flex flex-col items-center">
                         <p class="text-sm font-bold text-gray-800 w-full text-left">Kepala Sekolah SD,</p>
@@ -1958,86 +2061,94 @@
             return page1 + page2;
         }
 
+        // ==================================================
+        // BUILD SLIP PDF (1 HALAMAN PER GURU) DARI STAGING
+        // ==================================================
         function buildSlipPotonganNew() {
-            let tbodyHtml = '';
-            const rows = document.querySelectorAll('#edit-att-tbody tr');
-            if(rows.length === 0 || rows[0].innerText.includes('Waiting')) {
-                tbodyHtml = `<tr><td colspan="6" class="p-3 text-center border-l border-r border-b border-gray-300 italic text-red-600 font-bold">Data absensi belum disinkronkan / kosong.</td></tr>`;
-            } else {
-                let no = 1;
-                rows.forEach(tr => {
-                    let cells = tr.querySelectorAll('td');
-                    let nama = cells[0].innerText;
-                    let hadir = cells[1].querySelector('input').value;
-                    let sakit = cells[2].querySelector('input').value;
-                    let izin = cells[3].querySelector('input').value;
-                    let alpa = cells[4].querySelector('input').value;
-                    
-                    let rowClass = no % 2 !== 0 ? 'border-b border-gray-200 hover:bg-gray-50' : 'border-b border-gray-200 bg-gray-50 hover:bg-gray-100';
-                    tbodyHtml += `
-                    <tr class="${rowClass}">
-                        <td class="p-3 text-center border-l border-r border-gray-300">${no}</td>
-                        <td class="p-3 border-r border-gray-300 font-bold">${nama}</td>
-                        <td class="p-3 text-center border-r border-gray-300 text-green-600 font-bold">${hadir}</td>
-                        <td class="p-3 text-center border-r border-gray-300 text-blue-600 font-bold">${sakit}</td>
-                        <td class="p-3 text-center border-r border-gray-300 text-orange-500 font-bold">${izin}</td>
-                        <td class="p-3 text-center border-r border-gray-300 text-red-600 font-bold">${alpa}</td>
-                    </tr>`;
-                    no++;
-                });
-            }
-
-            return `
-            <div class="a4-page-potrait relative text-black bg-white p-[15mm] font-sans">
-                <div class="flex items-center justify-between border-b-[4px] border-[#001b94] pb-4 mb-6">
-                    <div class="flex items-center gap-4">
-                        <img src="https://thumbs2.imgbox.com/8c/47/ccEpfNGX_t.png" alt="Logo" class="w-16 h-16 object-contain">
-                        <div>
-                            <h1 class="text-xl font-black text-[#001b94] tracking-widest uppercase m-0 leading-tight">AL-WILDAN 15</h1>
-                            <p class="text-xs text-gray-600 m-0 font-semibold mt-1">Sistem HR & Operasional</p>
+            let fullHtml = '';
+            let startDate = document.getElementById('att-date-start').value;
+            let endDate = document.getElementById('att-date-end').value;
+            
+            globalEditedAttendance.forEach((guru) => {
+                fullHtml += `
+                <div class="a4-page-potrait">
+                    <div class="flex items-center justify-between border-b-[4px] border-[#001b94] pb-4 mb-6">
+                        <div class="flex items-center gap-4">
+                            <img src="https://thumbs2.imgbox.com/8c/47/ccEpfNGX_t.png" alt="Logo" class="w-16 h-16 object-contain">
+                            <div>
+                                <h1 class="text-xl font-black text-[#001b94] tracking-widest uppercase m-0 leading-tight">AL-WILDAN 15</h1>
+                                <p class="text-xs text-gray-600 m-0 font-semibold mt-1">Sistem HR & Operasional</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <h2 class="text-lg font-bold text-gray-800 uppercase m-0 leading-tight">Slip Kehadiran Individu</h2>
+                            <p class="text-[10px] text-gray-500 font-mono mt-1">Ref: AW15/HR-SLIP/${Math.floor(Math.random()*1000).toString().padStart(3, '0')}</p>
                         </div>
                     </div>
-                    <div class="text-right">
-                        <h2 class="text-lg font-bold text-gray-800 uppercase m-0 leading-tight">Rekapitulasi Kehadiran Kolektif</h2>
-                        <p class="text-[10px] text-gray-500 font-mono mt-1">Ref: AW15/HR/${Math.floor(Math.random()*1000).toString().padStart(3, '0')}</p>
-                    </div>
-                </div>
 
-                <div class="mb-6 flex justify-between text-sm bg-blue-50 p-4 rounded border border-blue-100">
-                    <div>
-                        <p class="mb-1">Periode Cetak &nbsp;: <b class="font-mono">${document.getElementById('att-date-start').value} s/d ${document.getElementById('att-date-end').value}</b></p>
-                        <p>Unit / Dept &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: <b>Guru / Akademik</b></p>
+                    <div class="mb-6 flex justify-between text-sm bg-blue-50 p-4 rounded border border-blue-100">
+                        <div>
+                            <p class="mb-1 text-xs text-gray-500 uppercase font-bold tracking-widest">Identitas Pegawai</p>
+                            <p class="text-lg font-bold text-[#001b94] mb-2">${guru.nama}</p>
+                            <p class="text-xs">Periode : <b class="font-mono">${startDate} s/d ${endDate}</b></p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs">Dicetak Pada : <b>${new Date().toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'})}</b></p>
+                        </div>
                     </div>
-                    <div class="text-right">
-                        <p>Tanggal Cetak : <b>${new Date().toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'})}</b></p>
+
+                    <div class="mb-3"><h3 class="font-bold text-[#001b94] text-base border-l-4 border-[#ff6600] pl-2">I. Rekapitulasi Kehadiran & Absensi</h3></div>
+                    <table class="w-full border-collapse text-sm mb-8">
+                        <thead>
+                            <tr class="bg-[#001b94] text-white">
+                                <th class="p-3 text-center border border-[#001b94]">Hadir</th>
+                                <th class="p-3 text-center border border-[#001b94]">Sakit</th>
+                                <th class="p-3 text-center border border-[#001b94]">Izin/DL</th>
+                                <th class="p-3 text-center border border-[#001b94]">Alpa (Mangkir)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-gray-300">
+                                <td class="p-4 text-center border-l border-r border-gray-300 text-green-600 font-bold text-lg">${guru.hadir}</td>
+                                <td class="p-4 text-center border-r border-gray-300 text-blue-600 font-bold text-lg">${guru.sakit}</td>
+                                <td class="p-4 text-center border-r border-gray-300 text-orange-500 font-bold text-lg">${guru.izin}</td>
+                                <td class="p-4 text-center border-r border-gray-300 text-red-600 font-bold text-lg">${guru.alpa}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="mb-3"><h3 class="font-bold text-[#001b94] text-base border-l-4 border-[#ff6600] pl-2">II. Rincian Keterlambatan & Potongan</h3></div>
+                    <table class="w-full border-collapse text-sm mb-8">
+                        <thead>
+                            <tr class="bg-gray-100 text-gray-700">
+                                <th class="p-3 text-left border border-gray-300">Deskripsi</th>
+                                <th class="p-3 text-right border border-gray-300 w-48">Nilai / Nominal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b border-gray-200">
+                                <td class="p-3 border-l border-r border-gray-300 font-semibold text-gray-600">Total Akumulasi Menit Keterlambatan</td>
+                                <td class="p-3 text-right border-r border-gray-300 font-mono text-orange-600 font-bold">${guru.totalTelatMenit} Menit</td>
+                            </tr>
+                            <tr class="border-b border-gray-300 bg-red-50">
+                                <td class="p-3 border-l border-r border-gray-300 font-bold text-[#b91c1c]">TOTAL POTONGAN TRANSPORT</td>
+                                <td class="p-3 text-right border-r border-gray-300 font-mono text-xl font-bold text-[#b91c1c]">${formatRp(guru.totalPotongan)}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="text-[10px] text-gray-500 bg-gray-50 p-4 rounded border border-gray-200 mt-10">
+                        <p class="font-bold mb-1 uppercase">Catatan HRD:</p>
+                        <p>Total potongan pada slip ini merupakan akumulasi berdasarkan sistem absensi biometrik yang telah divalidasi dan akan mengurangi nominal Transport pada gaji bulanan.</p>
                     </div>
-                </div>
 
-                <div class="mb-3"><h3 class="font-bold text-[#001b94] text-base border-l-4 border-[#ff6600] pl-2">I. Daftar Kehadiran & Absensi (Validasi Manual)</h3></div>
-                <table class="w-full border-collapse text-sm mb-8">
-                    <thead>
-                        <tr class="bg-[#001b94] text-white">
-                            <th class="p-3 text-center border border-[#001b94]">No</th>
-                            <th class="p-3 text-left border border-[#001b94]">Nama Personnel</th>
-                            <th class="p-3 text-center border border-[#001b94]">Hadir</th>
-                            <th class="p-3 text-center border border-[#001b94]">Sakit</th>
-                            <th class="p-3 text-center border border-[#001b94]">Izin/DL</th>
-                            <th class="p-3 text-center border border-[#001b94]">Alpa</th>
-                        </tr>
-                    </thead>
-                    <tbody>${tbodyHtml}</tbody>
-                </table>
-                
-                <div class="mb-3"><h3 class="font-bold text-[#001b94] text-base border-l-4 border-[#ff6600] pl-2">II. Rincian Keterlambatan Harian</h3></div>
-                <div class="bg-gray-100 border border-gray-300 p-4 text-center text-sm italic text-gray-600 rounded">
-                    Rincian log potong telat akan digenerate secara individu melalui API Backend saat terkoneksi.
-                </div>
-
-                <div class="absolute bottom-[15mm] left-[15mm] right-[15mm] text-[10px] text-gray-400 border-t border-gray-300 pt-2 flex justify-between">
-                    <span>*Dokumen cetak komputer ini sah (Berdasarkan Edit Admin).</span>
-                    <span>Printed By: System Administrator</span>
-                </div>
-            </div>`;
+                    <div class="absolute bottom-[15mm] left-[15mm] right-[15mm] text-[10px] text-gray-400 border-t border-gray-300 pt-2 flex justify-between">
+                        <span>*Dokumen cetak komputer ini sah dan telah diverifikasi oleh Administrator HR.</span>
+                        <span>CONFIDENTIAL - AL-WILDAN 15</span>
+                    </div>
+                </div>`;
+            });
+            return fullHtml;
         }
 
         function buildRekapInfalNew() {
@@ -2045,7 +2156,7 @@
             let end = document.getElementById('infal-print-end').value;
             
             return `
-            <div class="a4-page relative text-black bg-white p-[15mm] font-sans">
+            <div class="a4-page">
                 <div class="flex items-center justify-between border-b-[4px] border-[#001b94] pb-4 mb-6">
                     <div class="flex items-center gap-4">
                         <img src="https://thumbs2.imgbox.com/8c/47/ccEpfNGX_t.png" alt="Logo" class="w-16 h-16 object-contain">
@@ -2083,13 +2194,13 @@
                     </thead>
                     <tbody>
                         <tr class="border-b border-gray-200">
-                            <td colspan="6" class="p-4 text-center italic text-gray-500">Tabel akan terisi otomatis setelah API Backend selesai dibangun.</td>
+                            <td colspan="6" class="p-4 text-center italic text-gray-500">Tarik data PDF belum dilengkapi (menunggu v4)</td>
                         </tr>
                     </tbody>
                 </table>
                 <div class="absolute bottom-[15mm] left-[15mm] right-[15mm] text-[10px] text-gray-400 border-t border-gray-300 pt-2 flex justify-between">
                     <span>*Dokumen cetak komputer ini sah dari Sistem HR & Operasional Al-Wildan 15</span>
-                    <span>Printed By: System Administrator | Page 1 of 1</span>
+                    <span>Printed By: System Administrator</span>
                 </div>
             </div>`;
         }
