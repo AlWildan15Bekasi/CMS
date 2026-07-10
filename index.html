@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Management Panel System - Al-Wildan 15 (V4.2 Master PDF)</title>
+    <title>Management Panel System - Al-Wildan 15 (V4.3 Ultimate PDF)</title>
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="favicon.png">
@@ -173,16 +173,19 @@
         .toast-error { border-left: 4px solid #ff007f; }
         .toast-info { border-left: 4px solid #00e5ff; }
 
-        /* Print Styles - NATURAL FLOW (Opsi 1) */
+        /* Print Styles - ANTI BLANK PAGE & A4 STRICT */
         #print-section { display: none; }
         .a4-page { width: 297mm; min-height: 210mm; background: white !important; color: black !important; margin: 0 auto 20mm auto; padding: 15mm; box-sizing: border-box; font-family: Arial, sans-serif; page-break-after: always; }
         .a4-page-potrait { width: 210mm; min-height: 297mm; background: white !important; color: black !important; margin: 0 auto 20mm auto; padding: 15mm; box-sizing: border-box; font-family: Arial, sans-serif; page-break-after: always; }
         
         @media print { 
-            body { background: white !important; display: block !important; height: auto !important; overflow: visible !important; } 
+            @page { size: A4 portrait; margin: 0; }
+            body { background: white !important; display: block !important; height: auto !important; overflow: visible !important; margin: 0 !important; padding: 0 !important; } 
             #login-page, #main-app, .modal-overlay, #toast-container { display: none !important; } 
-            #print-section { display: block !important; position: static !important; width: 100% !important; margin: 0 !important; padding: 0 !important; } 
-            .a4-page, .a4-page-potrait { margin: 0 auto !important; box-shadow: none !important; border: none !important; page-break-after: always; } 
+            #print-section { display: block !important; position: absolute !important; top: 0; left: 0; width: 100% !important; margin: 0 !important; padding: 0 !important; } 
+            .a4-page, .a4-page-potrait { margin: 0 auto !important; box-shadow: none !important; border: none !important; page-break-after: always; page-break-inside: avoid; } 
+            /* THE MAGIC CSS TO PREVENT EXTRA BLANK PAGE AT THE END */
+            #print-section > div:last-child { page-break-after: auto !important; }
             .no-print { display: none !important; } 
             * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; } 
         }
@@ -273,6 +276,7 @@
         <main class="flex-1 overflow-y-auto p-4 md:p-6 relative no-print-bg">
             <div class="relative z-10 h-full no-print max-w-7xl mx-auto">
                 
+                <!-- TAB 1: NEW DASHBOARD -->
                 <div id="tab-home" class="tab-content active">
                     <div class="cyber-panel p-3 mb-6 flex items-center">
                         <div class="font-bold tracking-widest text-[10px] md:text-xs uppercase mr-4 shrink-0 px-3 py-1 rounded border z-10 relative ticker-bg">
@@ -311,6 +315,7 @@
                     </div>
                 </div>
 
+                <!-- TAB 2: OVERVIEW (ANALYTICS) -->
                 <div id="tab-overview" class="tab-content">
                     <div class="glass-panel p-3 rounded-full flex flex-col md:flex-row items-center justify-between gap-4 mb-6 pr-4 pl-6">
                         <div class="flex items-center gap-3">
@@ -369,6 +374,7 @@
                     </div>
                 </div>
 
+                <!-- TAB 3: ATTENDANCE RECAP -->
                 <div id="tab-attendance" class="tab-content">
                     <div class="glass-panel p-1 rounded-2xl flex flex-col h-[85vh]">
                         <div class="custom-bg-alt rounded-xl m-1 p-4 flex flex-col md:flex-row justify-between items-center gap-4 transition-colors">
@@ -401,6 +407,7 @@
                     </div>
                 </div>
 
+                <!-- TAB 4: CICO - CLASS -->
                 <div id="tab-cico" class="tab-content">
                     <div class="glass-panel p-1 rounded-2xl flex flex-col h-[85vh]">
                         <div class="custom-bg-alt rounded-xl m-1 p-4 flex flex-col md:flex-row justify-between items-center gap-4 transition-colors">
@@ -443,6 +450,7 @@
                     </div>
                 </div>
 
+                <!-- TAB 5: REPLACEMENT TEACHER -->
                 <div id="tab-replacement" class="tab-content">
                     <div class="flex justify-between items-center mb-6 px-2">
                         <div class="flex items-center gap-3">
@@ -453,7 +461,7 @@
                             <input type="date" id="infal-print-start" class="input-cyber h-9 text-xs w-32 border-cyan-500/30">
                             <span class="text-neoncyan/50 text-xs"><i class="fas fa-minus"></i></span>
                             <input type="date" id="infal-print-end" class="input-cyber h-9 text-xs w-32 border-cyan-500/30">
-                            <button onclick="printPDF('rekapInfal')" class="btn-outline-cyber px-5 h-9 text-xs font-bold tracking-widest uppercase flex items-center gap-2"><i class="fas fa-file-pdf"></i> Generate Log</button>
+                            <button onclick="printPDF('rekapInfal')" id="btn-print-infal" class="btn-outline-cyber px-5 h-9 text-xs font-bold tracking-widest uppercase flex items-center gap-2"><i class="fas fa-file-pdf"></i> Generate Log</button>
                         </div>
                     </div>
                     
@@ -464,7 +472,7 @@
                                 <select id="radar-hari" class="bg-transparent text-lighttext dark:text-gray-300 text-xs px-3 outline-none w-2/5 border-r custom-border font-bold"><option value="Senin">Senin</option><option value="Selasa">Selasa</option><option value="Rabu">Rabu</option><option value="Kamis">Kamis</option><option value="Jumat">Jumat</option></select>
                                 <select id="radar-jp" class="bg-transparent text-lighttext dark:text-gray-300 text-xs px-3 outline-none w-2/5 border-r custom-border font-bold"><option value="JP 1">JP 1</option><option value="JP 2">JP 2</option><option value="JP 3">JP 3</option><option value="JP 4">JP 4</option><option value="JP 5">JP 5</option><option value="JP 6">JP 6</option></select>
                                 <div class="flex w-1/5 justify-around items-center">
-                                    <button onclick="loadStandbyRadar()" class="text-neoncyan hover:text-blue-500 transition"><i class="fas fa-search text-sm"></i></button>
+                                    <button onclick="loadStandbyRadar()" id="btn-radar-search" class="text-neoncyan hover:text-blue-500 transition"><i class="fas fa-search text-sm"></i></button>
                                     <button onclick="clearStandbyRadar()" class="text-muted hover:text-neonpink transition"><i class="fas fa-times text-sm"></i></button>
                                 </div>
                             </div>
@@ -476,7 +484,7 @@
                                 <select id="tracker-hari" class="bg-transparent text-lighttext dark:text-gray-300 text-xs px-3 outline-none w-1/3 border-r custom-border font-bold"><option value="Senin">Senin</option><option value="Selasa">Selasa</option><option value="Rabu">Rabu</option><option value="Kamis">Kamis</option><option value="Jumat">Jumat</option></select>
                                 <select id="tracker-guru" class="bg-transparent text-neonyellow dark:text-neonyellow text-orange-600 text-xs px-3 outline-none w-1/2 border-r custom-border global-teacher-dropdown font-bold"><option value="">-- Awaiting Sync --</option></select>
                                 <div class="flex w-1/6 justify-around items-center">
-                                    <button onclick="loadPersonalTracker()" class="text-neonyellow dark:text-neonyellow text-orange-500 hover:text-orange-400 transition"><i class="fas fa-search text-sm"></i></button>
+                                    <button onclick="loadPersonalTracker()" id="btn-tracker-search" class="text-neonyellow dark:text-neonyellow text-orange-500 hover:text-orange-400 transition"><i class="fas fa-search text-sm"></i></button>
                                     <button onclick="clearPersonalTracker()" class="text-muted hover:text-neonpink transition"><i class="fas fa-times text-sm"></i></button>
                                 </div>
                             </div>
@@ -540,11 +548,13 @@
                     </div>
                 </div>
 
+                <!-- TAB 6: TEACHER PERFORMANCE -->
                 <div id="tab-performance" class="tab-content">
                     <div class="flex gap-4 mb-6 border-b custom-border pb-2 overflow-x-auto" id="subnav-perf">
                         <button onclick="switchSubTab('perf', 'supervision')" id="btn-sub-perf-supervision" class="text-neoncyan dark:text-neoncyan text-blue-600 font-bold tracking-widest text-xs uppercase border-b-2 border-neoncyan dark:border-neoncyan border-blue-600 pb-2 whitespace-nowrap transition sub-tab-btn">Learning Supervision</button>
                         <button onclick="switchSubTab('perf', 'additional')" id="btn-sub-perf-additional" class="text-muted hover:text-lighttext dark:hover:text-white font-bold tracking-widest text-xs uppercase border-b-2 border-transparent pb-2 whitespace-nowrap transition sub-tab-btn">Additional Scoring</button>
                     </div>
+                    
                     <div id="sub-perf-supervision" class="block">
                         <div class="cyber-panel p-5 mb-6">
                             <h3 class="font-bold text-neongreen dark:text-neongreen text-green-600 mb-4 uppercase text-[10px] tracking-[0.3em]">Observation Identity</h3>
@@ -617,6 +627,7 @@
                     </div>
                 </div>
 
+                <!-- TAB 7: EVENT MANAGEMENT -->
                 <div id="tab-event" class="tab-content">
                     <div class="flex gap-4 mb-6 border-b custom-border pb-2 overflow-x-auto" id="subnav-event">
                         <button onclick="switchSubTab('event', 'assign')" id="btn-sub-event-assign" class="text-neonyellow dark:text-neonyellow text-orange-500 font-bold tracking-widest text-xs uppercase border-b-2 border-neonyellow dark:border-neonyellow border-orange-500 pb-2 whitespace-nowrap transition sub-tab-btn">Assignment as PIC</button>
@@ -650,6 +661,7 @@
                     </div>
                 </div>
 
+                <!-- TAB 8: COMMISSION TRACKER -->
                 <div id="tab-commission" class="tab-content">
                     <div class="flex gap-4 mb-6 border-b custom-border pb-2 overflow-x-auto" id="subnav-comm">
                         <button onclick="switchSubTab('comm', 'assign')" id="btn-sub-comm-assign" class="text-neonpink dark:text-neonpink text-pink-600 font-bold tracking-widest text-xs uppercase border-b-2 border-neonpink dark:border-neonpink border-pink-600 pb-2 whitespace-nowrap transition sub-tab-btn">Commission Assignment</button>
@@ -682,6 +694,7 @@
                     </div>
                 </div>
 
+                <!-- TAB 9: PERFORMANCE REVIEW -->
                 <div id="tab-review" class="tab-content">
                     <div class="flex justify-between items-center mb-6 px-2">
                         <div class="flex items-center gap-3">
@@ -713,13 +726,13 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                                 <div class="space-y-3">
                                     <div class="border custom-border rounded p-3 custom-bg-alt flex justify-between items-center">
-                                        <span class="text-xs font-bold text-lighttext dark:text-gray-300">A. Kehadiran & Kedisiplinan</span><span class="font-mono font-bold text-neongreen" id="rev-val-1">0%</span>
+                                        <span class="text-xs font-bold text-lighttext dark:text-gray-300">A. Kehadiran & Kedisiplinan Mengajar</span><span class="font-mono font-bold text-neongreen" id="rev-val-1">0%</span>
                                     </div>
                                     <div class="border custom-border rounded p-3 custom-bg-alt flex justify-between items-center">
-                                        <span class="text-xs font-bold text-lighttext dark:text-gray-300">B. Classroom CICO</span><span class="font-mono font-bold text-neongreen" id="rev-val-2">0%</span>
+                                        <span class="text-xs font-bold text-lighttext dark:text-gray-300">B. Supervisi Akademik</span><span class="font-mono font-bold text-neoncyan" id="rev-val-2">0</span>
                                     </div>
                                     <div class="border custom-border rounded p-3 custom-bg-alt flex justify-between items-center">
-                                        <span class="text-xs font-bold text-lighttext dark:text-gray-300">C. Supervisi Akademik</span><span class="font-mono font-bold text-neoncyan" id="rev-val-3">0</span>
+                                        <span class="text-xs font-bold text-lighttext dark:text-gray-300">C. Kehadiran Rapat & Pelatihan</span><span class="font-mono font-bold text-neonyellow" id="rev-val-3">Pending</span>
                                     </div>
                                     <div class="border custom-border rounded p-3 custom-bg-alt flex justify-between items-center">
                                         <span class="text-xs font-bold text-lighttext dark:text-gray-300">D. Kehadiran Piket</span><span class="font-mono font-bold text-neonyellow" id="rev-val-4">Pending</span>
@@ -730,19 +743,19 @@
                                 </div>
                                 <div class="space-y-3">
                                     <div class="border custom-border rounded p-3 custom-bg-alt flex justify-between items-center">
-                                        <span class="text-xs font-bold text-lighttext dark:text-gray-300">F. Event & Kepanitiaan</span><span class="font-mono font-bold text-neonpink" id="rev-val-6">Pending</span>
+                                        <span class="text-xs font-bold text-lighttext dark:text-gray-300">F. Event & Commission</span><span class="font-mono font-bold text-neonpink" id="rev-val-6">Pending</span>
                                     </div>
                                     <div class="border custom-border rounded p-3 custom-bg-alt flex justify-between items-center">
-                                        <span class="text-xs font-bold text-lighttext dark:text-gray-300">G. Commission Task</span><span class="font-mono font-bold text-neonpink" id="rev-val-7">Pending</span>
+                                        <span class="text-xs font-bold text-lighttext dark:text-gray-300">G. Feedback Wali Murid (Walkelas)</span><span class="font-mono font-bold text-blue-500" id="rev-val-7">Pending</span>
                                     </div>
                                     <div class="border custom-border rounded p-3 custom-bg-alt flex justify-between items-center">
-                                        <span class="text-xs font-bold text-lighttext dark:text-gray-300">H. Feedback Wali Murid</span><span class="font-mono font-bold text-blue-500" id="rev-val-8">Pending</span>
+                                        <span class="text-xs font-bold text-lighttext dark:text-gray-300">H. Feedback Murid (Walkelas)</span><span class="font-mono font-bold text-blue-500" id="rev-val-8">Pending</span>
                                     </div>
                                     <div class="border custom-border rounded p-3 custom-bg-alt flex justify-between items-center">
-                                        <span class="text-xs font-bold text-lighttext dark:text-gray-300">I. Feedback Murid</span><span class="font-mono font-bold text-blue-500" id="rev-val-9">Pending</span>
+                                        <span class="text-xs font-bold text-lighttext dark:text-gray-300">I. Feedback Murid (Guru Mapel)</span><span class="font-mono font-bold text-blue-500" id="rev-val-9">Pending</span>
                                     </div>
                                     <div class="border custom-border rounded p-3 custom-bg-alt flex justify-between items-center">
-                                        <span class="text-xs font-bold text-lighttext dark:text-gray-300">J. Penilaian Sejawat</span><span class="font-mono font-bold text-blue-500" id="rev-val-10">Pending</span>
+                                        <span class="text-xs font-bold text-lighttext dark:text-gray-300">J. Penilaian Teman Sejawat</span><span class="font-mono font-bold text-blue-500" id="rev-val-10">Pending</span>
                                     </div>
                                 </div>
                             </div>
@@ -750,11 +763,11 @@
                             <h4 class="font-bold text-sm text-lighttext dark:text-white uppercase tracking-widest mb-3 border-b custom-border pb-1">Komentar & Catatan Khusus</h4>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                                 <div class="border custom-border rounded p-3 bg-gray-50 dark:bg-[#050a15]"><p class="text-[10px] text-muted font-bold uppercase mb-1">1. Hasil Supervisi</p><p class="text-xs text-lighttext dark:text-gray-300 italic" id="rev-kom-1">Waiting API Sync...</p></div>
-                                <div class="border custom-border rounded p-3 bg-gray-50 dark:bg-[#050a15]"><p class="text-[10px] text-muted font-bold uppercase mb-1">2. Feedback Wali Murid (ke Walkelas)</p><p class="text-xs text-lighttext dark:text-gray-300 italic" id="rev-kom-2">Waiting API Sync...</p></div>
-                                <div class="border custom-border rounded p-3 bg-gray-50 dark:bg-[#050a15]"><p class="text-[10px] text-muted font-bold uppercase mb-1">3. Feedback Murid (ke Walkelas)</p><p class="text-xs text-lighttext dark:text-gray-300 italic" id="rev-kom-3">Waiting API Sync...</p></div>
-                                <div class="border custom-border rounded p-3 bg-gray-50 dark:bg-[#050a15]"><p class="text-[10px] text-muted font-bold uppercase mb-1">4. Feedback Murid (ke Guru Mapel)</p><p class="text-xs text-lighttext dark:text-gray-300 italic" id="rev-kom-4">Waiting API Sync...</p></div>
-                                <div class="border custom-border rounded p-3 bg-gray-50 dark:bg-[#050a15]"><p class="text-[10px] text-muted font-bold uppercase mb-1">5. Feedback Teman Sejawat</p><p class="text-xs text-lighttext dark:text-gray-300 italic" id="rev-kom-5">Waiting API Sync...</p></div>
-                                <div class="border custom-border rounded p-3 bg-gray-50 dark:bg-[#050a15]"><p class="text-[10px] text-muted font-bold uppercase mb-1">6. Feedback Manajemen/HR</p><p class="text-xs text-lighttext dark:text-gray-300 italic" id="rev-kom-6">Waiting API Sync...</p></div>
+                                <div class="border custom-border rounded p-3 bg-gray-50 dark:bg-[#050a15]"><p class="text-[10px] text-muted font-bold uppercase mb-1">2. Feedback Wali Murid (Walkelas)</p><p class="text-xs text-lighttext dark:text-gray-300 italic" id="rev-kom-2">Waiting API Sync...</p></div>
+                                <div class="border custom-border rounded p-3 bg-gray-50 dark:bg-[#050a15]"><p class="text-[10px] text-muted font-bold uppercase mb-1">3. Feedback Murid (Walkelas)</p><p class="text-xs text-lighttext dark:text-gray-300 italic" id="rev-kom-3">Waiting API Sync...</p></div>
+                                <div class="border custom-border rounded p-3 bg-gray-50 dark:bg-[#050a15]"><p class="text-[10px] text-muted font-bold uppercase mb-1">4. Feedback Murid (Guru Mapel)</p><p class="text-xs text-lighttext dark:text-gray-300 italic" id="rev-kom-4">Waiting API Sync...</p></div>
+                                <div class="border custom-border rounded p-3 bg-gray-50 dark:bg-[#050a15]"><p class="text-[10px] text-muted font-bold uppercase mb-1">5. Penilaian Teman Sejawat</p><p class="text-xs text-lighttext dark:text-gray-300 italic" id="rev-kom-5">Waiting API Sync...</p></div>
+                                <div class="border custom-border rounded p-3 bg-gray-50 dark:bg-[#050a15]"><p class="text-[10px] text-muted font-bold uppercase mb-1">6. Catatan Manajemen/HR</p><p class="text-xs text-lighttext dark:text-gray-300 italic" id="rev-kom-6">Waiting API Sync...</p></div>
                             </div>
 
                             <div class="text-center mt-8">
@@ -1355,6 +1368,7 @@
             const name = document.getElementById('new-score-name').value, period = document.getElementById('new-score-period').value;
             if(!name || !period) { showToast('Nama & Periode wajib diisi', 'error'); return; }
             closeModal('add-score-modal'); 
+            // Langsung buka form input, TANPA bikin dummy card di background.
             openInputScore(name, 'Semua Guru', 'Additional', period, []); 
         }
 
@@ -1388,6 +1402,7 @@
             const title = document.getElementById('input-score-title').innerText, type = document.getElementById('input-score-type').value, period = document.getElementById('input-score-subcontext').value;
             let scoresArr = [];
             
+            // DOM Traversal (Sapu Bersih) tanpa batasan nomor urut ID
             const rows = document.querySelectorAll('#input-score-body > div');
             rows.forEach(r => {
                 let name = r.querySelector('.inpscore_name')?.value; 
@@ -1403,9 +1418,11 @@
                 const btn = document.getElementById('btn-submit-score'); btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> SAVING BULK...'; btn.disabled = true;
                 
                 if(type === 'Additional') {
+                    // Bulk Upsert System
                     const res = await postAPI('saveAdditionalScore', {namaPenilaian: title, periode: period, target: 'Semua Guru', scores: scoresArr});
                     if(res && res.status === 'success') { showToast('Penilaian Berhasil Disimpan', 'success'); loadAdditionalScoreModules(); }
                 } else {
+                    // Old fallback for Leader Event/Comm looping requests
                     let promises = scoresArr.map(p => postAPI('saveScoring', p));
                     showToast(`Menyimpan ${promises.length} evaluasi...`, 'info'); await Promise.all(promises); showToast('Evaluasi Tersimpan', 'success');
                 }
@@ -1507,11 +1524,14 @@
             }
             else if (type === 'perfReview') { area.innerHTML = buildPerformanceReview(); }
             
+            // Allow DOM to render before print dialog
             setTimeout(() => { window.print(); }, 500);
         }                
 
         function buildPerformanceReview() {            
             const teacherName = document.getElementById('review-name-display').innerText, printDate = document.getElementById('review-date-stamp').innerText.replace('Date: ', '');            
+            
+            // HALAMAN 1
             let page1 = `            
             <div class="a4-page-potrait bg-white p-[15mm]">
                 <div class="flex items-center justify-between border-b-[4px] border-[#001b94] pb-4 mb-6">
@@ -1526,21 +1546,21 @@
                 <table class="w-full border-collapse text-[11px] mb-4">
                     <thead><tr class="bg-[#001b94] text-white"><th class="p-2 text-center border border-[#001b94] w-8">No</th><th class="p-2 text-left border border-[#001b94]">Indikator Penilaian Kinerja</th><th class="p-2 text-center border border-[#001b94] w-24">Skor / Nilai</th><th class="p-2 text-left border border-[#001b94] w-32">Sumber Data</th></tr></thead>
                     <tbody>
-                        <tr class="border-b border-gray-300"><td class="p-2 text-center border-l border-r border-gray-300">1</td><td class="p-2 border-r border-gray-300 font-bold">A. Attendance (Kehadiran Gerbang)</td><td class="p-2 text-center border-r border-gray-300 font-bold text-green-600">${document.getElementById('rev-val-1').innerText}</td><td class="p-2 border-r border-gray-300 text-gray-500 italic">Mesin Biometrik</td></tr>
-                        <tr class="border-b border-gray-300 bg-gray-50"><td class="p-2 text-center border-l border-r border-gray-300">2</td><td class="p-2 border-r border-gray-300 font-bold">B. Classroom CICO (Kedisiplinan Kelas)</td><td class="p-2 text-center border-r border-gray-300 font-bold text-green-600">${document.getElementById('rev-val-2').innerText}</td><td class="p-2 border-r border-gray-300 text-gray-500 italic">Web Guru (Scanner)</td></tr>
-                        <tr class="border-b border-gray-300"><td class="p-2 text-center border-l border-r border-gray-300">3</td><td class="p-2 border-r border-gray-300 font-bold">C. Teaching Quality (Supervisi Akademik)</td><td class="p-2 text-center border-r border-gray-300 font-bold text-blue-600">${document.getElementById('rev-val-3').innerText}</td><td class="p-2 border-r border-gray-300 text-gray-500 italic">Form Supervisi</td></tr>
+                        <tr class="border-b border-gray-300"><td class="p-2 text-center border-l border-r border-gray-300">1</td><td class="p-2 border-r border-gray-300 font-bold">A. Kehadiran & Kedisiplinan Mengajar</td><td class="p-2 text-center border-r border-gray-300 font-bold text-green-600">${document.getElementById('rev-val-1').innerText}</td><td class="p-2 border-r border-gray-300 text-gray-500 italic">Sistem Absensi & CICO</td></tr>
+                        <tr class="border-b border-gray-300 bg-gray-50"><td class="p-2 text-center border-l border-r border-gray-300">2</td><td class="p-2 border-r border-gray-300 font-bold">B. Supervisi Akademik</td><td class="p-2 text-center border-r border-gray-300 font-bold text-blue-600">${document.getElementById('rev-val-2').innerText}</td><td class="p-2 border-r border-gray-300 text-gray-500 italic">Form Supervisi</td></tr>
+                        <tr class="border-b border-gray-300"><td class="p-2 text-center border-l border-r border-gray-300">3</td><td class="p-2 border-r border-gray-300 font-bold">C. Kehadiran Rapat & Pelatihan</td><td class="p-2 text-center border-r border-gray-300 font-bold text-orange-500">${document.getElementById('rev-val-3').innerText}</td><td class="p-2 border-r border-gray-300 text-gray-500 italic">Additional Scoring</td></tr>
                         <tr class="border-b border-gray-300 bg-gray-50"><td class="p-2 text-center border-l border-r border-gray-300">4</td><td class="p-2 border-r border-gray-300 font-bold">D. Kehadiran Piket</td><td class="p-2 text-center border-r border-gray-300 font-bold text-orange-500">${document.getElementById('rev-val-4').innerText}</td><td class="p-2 border-r border-gray-300 text-gray-500 italic">Additional Scoring</td></tr>
-                        <tr class="border-b border-gray-300"><td class="p-2 text-center border-l border-r border-gray-300">5</td><td class="p-2 border-r border-gray-300 font-bold">E. Kepatuhan Administratif (RPP, dll)</td><td class="p-2 text-center border-r border-gray-300 font-bold text-orange-500">${document.getElementById('rev-val-5').innerText}</td><td class="p-2 border-r border-gray-300 text-gray-500 italic">Additional Scoring</td></tr>
-                        <tr class="border-b border-gray-300 bg-gray-50"><td class="p-2 text-center border-l border-r border-gray-300">6</td><td class="p-2 border-r border-gray-300 font-bold">F. Event Committee (Kepanitiaan)</td><td class="p-2 text-center border-r border-gray-300 font-bold text-pink-600">${document.getElementById('rev-val-6').innerText}</td><td class="p-2 border-r border-gray-300 text-gray-500 italic">Leader Scoring</td></tr>
-                        <tr class="border-b border-gray-300"><td class="p-2 text-center border-l border-r border-gray-300">7</td><td class="p-2 border-r border-gray-300 font-bold">G. Commission Task (Tugas Komisi Khusus)</td><td class="p-2 text-center border-r border-gray-300 font-bold text-pink-600">${document.getElementById('rev-val-7').innerText}</td><td class="p-2 border-r border-gray-300 text-gray-500 italic">Leader Scoring</td></tr>
-                        <tr class="border-b border-gray-300 bg-gray-50"><td class="p-2 text-center border-l border-r border-gray-300">8</td><td class="p-2 border-r border-gray-300 font-bold">H. Feedback Wali Murid (Bagi Walkelas)</td><td class="p-2 text-center border-r border-gray-300 font-bold text-blue-600">${document.getElementById('rev-val-8').innerText}</td><td class="p-2 border-r border-gray-300 text-gray-500 italic">Web Murid/Ortu</td></tr>
-                        <tr class="border-b border-gray-300"><td class="p-2 text-center border-l border-r border-gray-300">9</td><td class="p-2 border-r border-gray-300 font-bold">I. Feedback Murid (Bagi Walkelas & Mapel)</td><td class="p-2 text-center border-r border-gray-300 font-bold text-blue-600">${document.getElementById('rev-val-9').innerText}</td><td class="p-2 border-r border-gray-300 text-gray-500 italic">Web Murid</td></tr>
+                        <tr class="border-b border-gray-300"><td class="p-2 text-center border-l border-r border-gray-300">5</td><td class="p-2 border-r border-gray-300 font-bold">E. Kepatuhan Administratif</td><td class="p-2 text-center border-r border-gray-300 font-bold text-orange-500">${document.getElementById('rev-val-5').innerText}</td><td class="p-2 border-r border-gray-300 text-gray-500 italic">Additional Scoring</td></tr>
+                        <tr class="border-b border-gray-300 bg-gray-50"><td class="p-2 text-center border-l border-r border-gray-300">6</td><td class="p-2 border-r border-gray-300 font-bold">F. Event & Commission</td><td class="p-2 text-center border-r border-gray-300 font-bold text-pink-600">${document.getElementById('rev-val-6').innerText}</td><td class="p-2 border-r border-gray-300 text-gray-500 italic">Leader Scoring</td></tr>
+                        <tr class="border-b border-gray-300"><td class="p-2 text-center border-l border-r border-gray-300">7</td><td class="p-2 border-r border-gray-300 font-bold">G. Feedback Wali Murid (Bagi Walkelas)</td><td class="p-2 text-center border-r border-gray-300 font-bold text-blue-600">${document.getElementById('rev-val-7').innerText}</td><td class="p-2 border-r border-gray-300 text-gray-500 italic">Web Murid/Ortu</td></tr>
+                        <tr class="border-b border-gray-300 bg-gray-50"><td class="p-2 text-center border-l border-r border-gray-300">8</td><td class="p-2 border-r border-gray-300 font-bold">H. Feedback Murid (Bagi Walkelas)</td><td class="p-2 text-center border-r border-gray-300 font-bold text-blue-600">${document.getElementById('rev-val-8').innerText}</td><td class="p-2 border-r border-gray-300 text-gray-500 italic">Web Murid</td></tr>
+                        <tr class="border-b border-gray-300"><td class="p-2 text-center border-l border-r border-gray-300">9</td><td class="p-2 border-r border-gray-300 font-bold">I. Feedback Murid (Bagi Guru Mapel)</td><td class="p-2 text-center border-r border-gray-300 font-bold text-blue-600">${document.getElementById('rev-val-9').innerText}</td><td class="p-2 border-r border-gray-300 text-gray-500 italic">Web Murid</td></tr>
                         <tr class="border-b border-gray-300 bg-gray-50"><td class="p-2 text-center border-l border-r border-gray-300">10</td><td class="p-2 border-r border-gray-300 font-bold">J. Penilaian Teman Sejawat</td><td class="p-2 text-center border-r border-gray-300 font-bold text-blue-600">${document.getElementById('rev-val-10').innerText}</td><td class="p-2 border-r border-gray-300 text-gray-500 italic">Web Guru</td></tr>
                     </tbody>
                 </table>
-                <div class="mt-8 text-[10px] text-gray-400 border-t border-gray-300 pt-2 flex justify-between"><span>*Dokumen cetak komputer ini sah dari Sistem HR & Operasional Al-Wildan 15</span><span>Page 1 of 2</span></div>
             </div>`;
             
+            // HALAMAN 2
             let page2 = `            
             <div class="a4-page-potrait bg-white p-[15mm]">
                 <div class="flex items-center justify-between border-b-[4px] border-[#001b94] pb-4 mb-6">
@@ -1552,23 +1572,25 @@
                     <div class="text-right"><p class="mb-1 text-sm text-gray-600">Print Date</p><p class="font-bold">${printDate}</p></div>
                 </div>
                 <div class="mb-2"><h3 class="font-bold text-[#001b94] text-sm border-l-4 border-[#ff6600] pl-2">II. Catatan Khusus & Komentar (Umpan Balik)</h3></div>
+                
                 <div class="grid grid-cols-2 gap-2 mb-4">
                     <div class="border border-gray-300 rounded p-2 bg-gray-50 h-24"><p class="text-[10px] text-gray-500 font-bold uppercase mb-1">1. Hasil Supervisi</p><p class="text-[11px] text-gray-800 italic leading-tight">${document.getElementById('rev-kom-1').innerText}</p></div>
-                    <div class="border border-gray-300 rounded p-2 bg-gray-50 h-24"><p class="text-[10px] text-gray-500 font-bold uppercase mb-1">2. Dari Wali Murid (Utk Walkelas)</p><p class="text-[11px] text-gray-800 italic leading-tight">${document.getElementById('rev-kom-2').innerText}</p></div>
-                    <div class="border border-gray-300 rounded p-2 bg-gray-50 h-24"><p class="text-[10px] text-gray-500 font-bold uppercase mb-1">3. Dari Murid (Utk Walkelas)</p><p class="text-[11px] text-gray-800 italic leading-tight">${document.getElementById('rev-kom-3').innerText}</p></div>
-                    <div class="border border-gray-300 rounded p-2 bg-gray-50 h-24"><p class="text-[10px] text-gray-500 font-bold uppercase mb-1">4. Dari Murid (Utk Guru Mapel)</p><p class="text-[11px] text-gray-800 italic leading-tight">${document.getElementById('rev-kom-4').innerText}</p></div>
-                    <div class="border border-gray-300 rounded p-2 bg-gray-50 h-24"><p class="text-[10px] text-gray-500 font-bold uppercase mb-1">5. Dari Teman Sejawat</p><p class="text-[11px] text-gray-800 italic leading-tight">${document.getElementById('rev-kom-5').innerText}</p></div>
-                    <div class="border border-gray-300 rounded p-2 bg-gray-50 h-24"><p class="text-[10px] text-gray-500 font-bold uppercase mb-1">6. Dari Manajemen/HR/Kepsek</p><p class="text-[11px] text-gray-800 italic leading-tight">${document.getElementById('rev-kom-6').innerText}</p></div>
+                    <div class="border border-gray-300 rounded p-2 bg-gray-50 h-24"><p class="text-[10px] text-gray-500 font-bold uppercase mb-1">2. Feedback Wali Murid (Walkelas)</p><p class="text-[11px] text-gray-800 italic leading-tight">${document.getElementById('rev-kom-2').innerText}</p></div>
+                    <div class="border border-gray-300 rounded p-2 bg-gray-50 h-24"><p class="text-[10px] text-gray-500 font-bold uppercase mb-1">3. Feedback Murid (Walkelas)</p><p class="text-[11px] text-gray-800 italic leading-tight">${document.getElementById('rev-kom-3').innerText}</p></div>
+                    <div class="border border-gray-300 rounded p-2 bg-gray-50 h-24"><p class="text-[10px] text-gray-500 font-bold uppercase mb-1">4. Feedback Murid (Guru Mapel)</p><p class="text-[11px] text-gray-800 italic leading-tight">${document.getElementById('rev-kom-4').innerText}</p></div>
+                    <div class="border border-gray-300 rounded p-2 bg-gray-50 h-24"><p class="text-[10px] text-gray-500 font-bold uppercase mb-1">5. Penilaian Teman Sejawat</p><p class="text-[11px] text-gray-800 italic leading-tight">${document.getElementById('rev-kom-5').innerText}</p></div>
+                    <div class="border border-gray-300 rounded p-2 bg-gray-50 h-24"><p class="text-[10px] text-gray-500 font-bold uppercase mb-1">6. Catatan Manajemen/HR</p><p class="text-[11px] text-gray-800 italic leading-tight">${document.getElementById('rev-kom-6').innerText}</p></div>
                 </div>
+
                 <div class="border-t border-gray-400 pt-2 flex justify-between items-center bg-[#001b94]/5 px-4 rounded mb-8">
                     <p class="text-sm font-bold text-gray-600 uppercase">REPORT STATUS:</p>
                     <p class="text-lg font-black text-[#001b94]">${document.getElementById('rev-final-rec').innerText}</p>
                 </div>
+                
                 <div class="mt-8 flex justify-between px-10">
                     <div class="text-left w-64 flex flex-col items-center"><p class="text-sm font-bold text-gray-800 w-full text-left">Kepala Sekolah SD,</p><div class="h-28 w-full"></div><p class="font-bold border-t border-black pt-1 text-sm text-gray-800 w-full text-left">Teja Komara, S.S.</p></div>
                     <div class="text-left w-64 flex flex-col items-center"><p class="text-sm text-gray-800 mb-1 w-full text-left">Bekasi, ${new Date().toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'})}</p><p class="text-sm font-bold text-gray-800 w-full text-left">Kepala Sekolah SMP dan SMA,</p><div class="h-20 w-full"></div><p class="font-bold border-t border-black pt-1 text-sm text-gray-800 w-full text-left">Abdul Azis, S.Pd.</p></div>
                 </div>                
-                <div class="mt-8 text-[10px] text-gray-400 border-t border-gray-300 pt-2 flex justify-between"><span>*Dokumen cetak komputer ini sah dari Sistem HR & Operasional Al-Wildan 15</span><span>Page 2 of 2</span></div>
             </div>`;            
             return page1 + page2;
         }
@@ -1669,11 +1691,6 @@
                         <p class="font-bold mb-1 uppercase">Catatan HRD:</p>                        
                         <p>Total potongan pada slip ini merupakan akumulasi berdasarkan sistem absensi biometrik yang telah divalidasi dan akan mengurangi nominal Transport pada gaji bulanan.</p>                    
                     </div>
-                    
-                    <div class="mt-8 text-[10px] text-gray-400 border-t border-gray-300 pt-2 flex justify-between">                        
-                        <span>*Dokumen cetak komputer ini sah dan diverifikasi oleh Administrator HR.</span>                        
-                        <span>CONFIDENTIAL - AL-WILDAN 15</span>                    
-                    </div>                
                 </div>`;            
             });            
             return fullHtml;        
@@ -1737,10 +1754,6 @@
                     </thead>                    
                     <tbody>${tbodyHtml}</tbody>                
                 </table>                
-                <div class="mt-8 text-[10px] text-gray-400 border-t border-gray-300 pt-2 flex justify-between">                    
-                    <span>*Dokumen cetak komputer ini sah dari Sistem HR & Operasional Al-Wildan 15</span>                    
-                    <span>Printed By: System Administrator | Page 1 of 1</span>                
-                </div>            
             </div>`;        
         }
     </script>
